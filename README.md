@@ -1,7 +1,7 @@
 
   # idlyboy.world
 
-  This is a code bundle for idlyboy.world. The original project is available at https://www.figma.com/design/RjXHm84k82ZyoeFtdbkFI3/idlyboy.world.
+  This is a code bundle for idlyboy.world.
 
   ## Running the code
 
