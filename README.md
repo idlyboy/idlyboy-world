@@ -1,0 +1,11 @@
+
+  # idlyboy.world
+
+  This is a code bundle for idlyboy.world. The original project is available at https://www.figma.com/design/RjXHm84k82ZyoeFtdbkFI3/idlyboy.world.
+
+  ## Running the code
+
+  Run `npm i` to install the dependencies.
+
+  Run `npm run dev` to start the development server.
+  
