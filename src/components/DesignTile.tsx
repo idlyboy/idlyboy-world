@@ -1,5 +1,6 @@
 import { ReactNode, memo, useRef, useEffect, useState } from 'react';
 import { useMousePosition } from '../contexts/MousePositionContext';
+import { getIsDragging } from './InfiniteCanvas';
 
 interface DesignTileProps {
   image?: string;
@@ -142,8 +143,8 @@ export const DesignTile = memo(function DesignTile({
           />
         )}
 
-        <h2 className="text-white text-3xl relative z-10">idlyboy</h2>
-        <p className="text-gray-400 text-sm relative z-10">design portfolio</p>
+        <h2 className="text-white text-3xl relative z-10">idlyboy's designs</h2>
+        <p className="text-gray-400 text-sm relative z-10 text-center px-4">swipe in any direction or use arrow keys to explore</p>
 
         <style>{`
           @keyframes flowPurpleSlow {
@@ -192,13 +193,19 @@ export const DesignTile = memo(function DesignTile({
     );
   }
 
+  const handleClick = () => {
+    // Only trigger click if we weren't dragging
+    if (!getIsDragging() && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div
       className="w-[314px] h-[224px] bg-[#080808] rounded-lg overflow-hidden cursor-pointer relative"
-      onClick={onClick}
+      onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      data-clickable
       style={{
         contain: 'strict',
         transform: 'translateZ(0)',

@@ -5,6 +5,7 @@ interface SubdividedTileProps {
   children: [ReactNode, ReactNode, ReactNode, ReactNode];
   span?: 'small' | 'medium' | 'large' | 'wide' | 'tall';
   glass?: boolean;
+  className?: string;
 }
 
 function GlassSubTile({ children }: { children: ReactNode }) {
@@ -179,7 +180,7 @@ function GlassSubTile({ children }: { children: ReactNode }) {
   );
 }
 
-export function SubdividedTile({ children, span = 'medium', glass = false }: SubdividedTileProps) {
+export function SubdividedTile({ children, span = 'medium', glass = false, className = '' }: SubdividedTileProps) {
   const spanClasses = {
     small: 'col-span-1 row-span-1',
     medium: 'col-span-1 row-span-1',
@@ -190,7 +191,7 @@ export function SubdividedTile({ children, span = 'medium', glass = false }: Sub
 
   if (glass) {
     return (
-      <div className={`grid grid-cols-2 grid-rows-2 gap-4 ${spanClasses[span]}`}>
+      <div className={`grid grid-cols-2 grid-rows-2 gap-4 ${spanClasses[span]} ${className}`}>
         <GlassSubTile>{children[0]}</GlassSubTile>
         <GlassSubTile>{children[1]}</GlassSubTile>
         <GlassSubTile>{children[2]}</GlassSubTile>
@@ -200,7 +201,7 @@ export function SubdividedTile({ children, span = 'medium', glass = false }: Sub
   }
 
   return (
-    <div className={`grid grid-cols-2 grid-rows-2 gap-4 ${spanClasses[span]}`}>
+    <div className={`grid grid-cols-2 grid-rows-2 gap-4 ${spanClasses[span]} ${className}`}>
       <div className="bg-[#080808] rounded-lg overflow-hidden">
         {children[0]}
       </div>

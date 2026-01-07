@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useEffect, useState } from 'react';
+import React, { ReactNode, useRef, useEffect, useState } from 'react';
 import { useMousePosition } from '../contexts/MousePositionContext';
 
 interface TileProps {

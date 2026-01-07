@@ -7,7 +7,7 @@ interface NavigationProps {
 }
 
 export function Navigation({ activeSection, onSectionChange }: NavigationProps) {
-  const menuItems = ['Home', 'Work', 'Design', 'Writing', 'Life'];
+  const menuItems = ['Home', 'Work', 'Design', 'Writing'];
   const navRef = useRef<HTMLElement>(null);
   const { mousePos } = useMousePosition();
   const [effectIntensity, setEffectIntensity] = useState(0);
@@ -129,11 +129,37 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
         />
       )}
 
-      <div className="mb-8 md:mb-16 relative z-10">
-        <h1 className="tracking-tight text-white">idlyboy</h1>
+      {/* Mobile: horizontal layout with title left, nav right */}
+      <div className="mobile-nav-header relative z-10">
+        <button onClick={() => onSectionChange('Home')} className="tracking-tight text-white hover:opacity-80 transition-opacity">
+          <h1>idlyboy</h1>
+        </button>
+        <ul className="mobile-nav-items">
+          {menuItems.map((item) => (
+            <li key={item}>
+              <button
+                onClick={() => onSectionChange(item)}
+                className={`text-left transition-colors whitespace-nowrap ${
+                  activeSection === item
+                    ? 'text-white'
+                    : 'text-gray-500 hover:text-white'
+                }`}
+              >
+                {item}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <ul className="flex md:flex-col flex-1 md:space-y-6 space-x-6 md:space-x-0 overflow-x-auto md:overflow-x-visible relative z-10">
+      {/* Desktop: vertical layout */}
+      <div className="desktop-nav-title relative z-10">
+        <button onClick={() => onSectionChange('Home')} className="tracking-tight text-white hover:opacity-80 transition-opacity">
+          <h1>idlyboy</h1>
+        </button>
+      </div>
+
+      <ul className="desktop-nav-items relative z-10">
         {menuItems.map((item) => (
           <li key={item}>
             <button
@@ -150,13 +176,45 @@ export function Navigation({ activeSection, onSectionChange }: NavigationProps) 
         ))}
       </ul>
 
-      <div className="mt-auto space-y-1 text-gray-500 hidden md:block relative z-10">
-        <button className="block hover:text-white transition-colors">
-          Contact
-        </button>
-      </div>
 
       <style>{`
+        /* Mobile: show horizontal layout, hide desktop layout */
+        .mobile-nav-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .mobile-nav-items {
+          display: flex;
+          gap: 20px;
+        }
+        .mobile-nav-items button {
+          font-size: 14px;
+        }
+        .desktop-nav-title {
+          display: none;
+        }
+        .desktop-nav-items {
+          display: none;
+        }
+
+        /* Desktop (768px+): show vertical layout, hide mobile layout */
+        @media (min-width: 768px) {
+          .mobile-nav-header {
+            display: none;
+          }
+          .desktop-nav-title {
+            display: block;
+            margin-bottom: 4rem;
+          }
+          .desktop-nav-items {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 1.5rem;
+          }
+        }
+
         @keyframes flowPurpleSlow {
           0% { transform: translate(0, 0) rotate(0deg); }
           25% { transform: translate(10px, -5px) rotate(90deg); }

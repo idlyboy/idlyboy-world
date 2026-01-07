@@ -8,6 +8,10 @@ interface InfiniteCanvasProps {
   gridHeight?: number;
 }
 
+// Global flag to track if we're currently dragging (used by tiles to ignore clicks)
+let isDragging = false;
+export const getIsDragging = () => isDragging;
+
 export function InfiniteCanvas({ 
   children, 
   centerOnMount = false,
@@ -27,19 +31,17 @@ export function InfiniteCanvas({
   const dragStartRef = useRef({ x: 0, y: 0 });
   const lastDragPosRef = useRef({ x: 0, y: 0 });
   const lastDragTimeRef = useRef(0);
+  const pointerStartPosRef = useRef({ x: 0, y: 0 });
   
   // Settings
   const SCROLL_SPEED = 0.6;
   const DRAG_FRICTION = 0.94;
   const MIN_VELOCITY = 0.1;
+  const DRAG_THRESHOLD = 8; // pixels moved before considered a drag
 
   // Wrap position for infinite scroll
   const wrapPosition = useCallback(() => {
     if (!infiniteScroll || !gridWidth || !gridHeight) return;
-    
-    // Keep position within the center grid section
-    // Position is negative (content moves opposite to scroll direction)
-    // Center grid spans from -gridWidth to -2*gridWidth (x) and -gridHeight to -2*gridHeight (y)
     
     while (posRef.current.x > -gridWidth) {
       posRef.current.x -= gridWidth;
@@ -105,13 +107,10 @@ export function InfiniteCanvas({
     const container = containerRef.current;
     const content = contentRef.current;
     
-    // Small delay to ensure content is rendered
     requestAnimationFrame(() => {
       let newX = 0, newY = 0;
       
       if (infiniteScroll && gridWidth && gridHeight) {
-        // For infinite scroll, center on the middle grid's center tile
-        // The middle grid starts at (gridWidth, gridHeight) in the 3x3 arrangement
         const centerTile = content.querySelector('[data-center-tile]') as HTMLElement;
         
         if (centerTile) {
@@ -122,7 +121,6 @@ export function InfiniteCanvas({
           newX = container.clientWidth / 2 - tileCenterX;
           newY = container.clientHeight / 2 - tileCenterY;
         } else {
-          // Center on the middle grid
           newX = container.clientWidth / 2 - gridWidth * 1.5;
           newY = container.clientHeight / 2 - gridHeight * 1.5;
         }
@@ -144,29 +142,24 @@ export function InfiniteCanvas({
       
       posRef.current = { x: newX, y: newY };
       updateTransform();
-      
-      // Make visible after positioning
       content.style.opacity = '1';
     });
   }, [centerOnMount, updateTransform, infiniteScroll, gridWidth, gridHeight]);
 
-  // Wheel handler - INSTANT response, no animation loop delay
+  // Wheel handler
   const handleWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Disable pointer events during scroll for performance
     if (!isScrollingRef.current && contentRef.current) {
       isScrollingRef.current = true;
       contentRef.current.style.pointerEvents = 'none';
     }
     
-    // Clear existing timeout
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
     
-    // Re-enable pointer events after scroll stops
     scrollTimeoutRef.current = setTimeout(() => {
       if (contentRef.current) {
         contentRef.current.style.pointerEvents = 'auto';
@@ -174,67 +167,186 @@ export function InfiniteCanvas({
       isScrollingRef.current = false;
     }, 100);
     
-    // Kill any momentum
     velRef.current = { x: 0, y: 0 };
-    
-    // Instant position update
     posRef.current.x -= e.deltaX * SCROLL_SPEED;
     posRef.current.y -= e.deltaY * SCROLL_SPEED;
-    
-    // Immediate DOM update
     updateTransform();
   }, [updateTransform]);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    const target = e.target as HTMLElement;
-    if (target.closest('[data-clickable]') || target.closest('button') || target.closest('a')) {
-      return;
-    }
-    
-    isDraggingRef.current = true;
-    velRef.current = { x: 0, y: 0 };
-    dragStartRef.current = { x: e.clientX - posRef.current.x, y: e.clientY - posRef.current.y };
-    lastDragPosRef.current = { x: e.clientX, y: e.clientY };
-    lastDragTimeRef.current = performance.now();
-    
-    containerRef.current?.setPointerCapture(e.pointerId);
-  }, []);
+  // Mouse/Touch handlers - simple approach without pointer capture
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!isDraggingRef.current) return;
+    const handleStart = (clientX: number, clientY: number) => {
+      isDraggingRef.current = true;
+      isDragging = false; // Reset - not yet confirmed as drag
+      velRef.current = { x: 0, y: 0 };
+      dragStartRef.current = { x: clientX - posRef.current.x, y: clientY - posRef.current.y };
+      lastDragPosRef.current = { x: clientX, y: clientY };
+      pointerStartPosRef.current = { x: clientX, y: clientY };
+      lastDragTimeRef.current = performance.now();
+    };
+
+    const handleMove = (clientX: number, clientY: number) => {
+      if (!isDraggingRef.current) return;
+      
+      const now = performance.now();
+      const dt = now - lastDragTimeRef.current;
+      
+      // Check if we've moved beyond threshold
+      const dx = clientX - pointerStartPosRef.current.x;
+      const dy = clientY - pointerStartPosRef.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance > DRAG_THRESHOLD) {
+        isDragging = true; // Global flag - tiles will check this
+      }
+      
+      posRef.current.x = clientX - dragStartRef.current.x;
+      posRef.current.y = clientY - dragStartRef.current.y;
+      updateTransform();
+      
+      if (dt > 0) {
+        velRef.current = {
+          x: (clientX - lastDragPosRef.current.x) / dt * 16,
+          y: (clientY - lastDragPosRef.current.y) / dt * 16,
+        };
+        lastDragPosRef.current = { x: clientX, y: clientY };
+        lastDragTimeRef.current = now;
+      }
+    };
+
+    const handleEnd = () => {
+      isDraggingRef.current = false;
+      // Keep isDragging true briefly so click handlers can check it
+      setTimeout(() => {
+        isDragging = false;
+      }, 50);
+    };
+
+    // Mouse events
+    const onMouseDown = (e: MouseEvent) => {
+      handleStart(e.clientX, e.clientY);
+    };
     
-    const now = performance.now();
-    const dt = now - lastDragTimeRef.current;
+    const onMouseMove = (e: MouseEvent) => {
+      handleMove(e.clientX, e.clientY);
+    };
     
-    // Instant position update
-    posRef.current.x = e.clientX - dragStartRef.current.x;
-    posRef.current.y = e.clientY - dragStartRef.current.y;
-    updateTransform();
+    const onMouseUp = () => {
+      handleEnd();
+    };
+
+    // Touch events
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        handleStart(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
     
-    // Track velocity for momentum
-    if (dt > 0) {
-      velRef.current = {
-        x: (e.clientX - lastDragPosRef.current.x) / dt * 16,
-        y: (e.clientY - lastDragPosRef.current.y) / dt * 16,
-      };
-      lastDragPosRef.current = { x: e.clientX, y: e.clientY };
-      lastDragTimeRef.current = now;
-    }
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    };
+    
+    const onTouchEnd = () => {
+      handleEnd();
+    };
+
+    container.addEventListener('mousedown', onMouseDown);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: true });
+    document.addEventListener('touchend', onTouchEnd);
+
+    return () => {
+      container.removeEventListener('mousedown', onMouseDown);
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      container.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
   }, [updateTransform]);
 
-  const handlePointerUp = useCallback(() => {
-    isDraggingRef.current = false;
-  }, []);
+  // Arrow key navigation - smooth continuous movement
+  useEffect(() => {
+    const keysPressed = new Set<string>();
+    const keyVelocity = { x: 0, y: 0 };
+    const KEY_ACCELERATION = 0.5;
+    const KEY_MAX_SPEED = 8;
+    const KEY_FRICTION = 0.92;
+    let animationId: number | null = null;
+
+    const animate = () => {
+      // Apply acceleration based on keys pressed
+      if (keysPressed.has('ArrowUp')) keyVelocity.y += KEY_ACCELERATION;
+      if (keysPressed.has('ArrowDown')) keyVelocity.y -= KEY_ACCELERATION;
+      if (keysPressed.has('ArrowLeft')) keyVelocity.x += KEY_ACCELERATION;
+      if (keysPressed.has('ArrowRight')) keyVelocity.x -= KEY_ACCELERATION;
+
+      // Clamp velocity
+      keyVelocity.x = Math.max(-KEY_MAX_SPEED, Math.min(KEY_MAX_SPEED, keyVelocity.x));
+      keyVelocity.y = Math.max(-KEY_MAX_SPEED, Math.min(KEY_MAX_SPEED, keyVelocity.y));
+
+      // Apply velocity
+      if (Math.abs(keyVelocity.x) > 0.1 || Math.abs(keyVelocity.y) > 0.1) {
+        posRef.current.x += keyVelocity.x;
+        posRef.current.y += keyVelocity.y;
+        updateTransform();
+      }
+
+      // Apply friction when no keys pressed
+      if (!keysPressed.has('ArrowLeft') && !keysPressed.has('ArrowRight')) {
+        keyVelocity.x *= KEY_FRICTION;
+      }
+      if (!keysPressed.has('ArrowUp') && !keysPressed.has('ArrowDown')) {
+        keyVelocity.y *= KEY_FRICTION;
+      }
+
+      // Continue animation if there's movement or keys pressed
+      if (keysPressed.size > 0 || Math.abs(keyVelocity.x) > 0.1 || Math.abs(keyVelocity.y) > 0.1) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        animationId = null;
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      
+      e.preventDefault();
+      keysPressed.add(e.key);
+      
+      // Start animation if not already running
+      if (!animationId) {
+        animationId = requestAnimationFrame(animate);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keysPressed.delete(e.key);
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+      if (animationId) cancelAnimationFrame(animationId);
+    };
+  }, [updateTransform]);
 
   return (
     <div
       ref={containerRef}
       data-infinite-canvas
       className="w-full h-full overflow-hidden bg-black cursor-grab active:cursor-grabbing"
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
       onWheel={handleWheel}
       style={{ 
         touchAction: 'none',
@@ -251,7 +363,6 @@ export function InfiniteCanvas({
           transform: 'translate3d(0, 0, 0)',
           opacity: centerOnMount ? 0 : 1,
           contain: 'layout style paint',
-          pointerEvents: 'auto',
         }}
       >
         {children}

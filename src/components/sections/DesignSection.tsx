@@ -363,8 +363,8 @@ function generateMetadataFromDesign(title: string) {
       if (projectName.includes(key) || key.includes(projectName)) {
         projectMeta = meta;
         break;
+        }
       }
-    }
   }
   
   // Default metadata if not found
@@ -425,7 +425,7 @@ export function DesignSection() {
   // Must include the gap after each section for seamless tiling
   const singleGridWidth = COLS * (TILE_WIDTH + GAP);
   const singleGridHeight = ROWS * (TILE_HEIGHT + GAP);
-
+  
   // Generate random delays for animation (stable across renders)
   const tileDelays = useMemo(() => {
     return KNOWN_DESIGNS.map(() => 200 + Math.random() * 600);
@@ -434,7 +434,7 @@ export function DesignSection() {
   // Build tiles for a single grid section
   const buildTiles = useCallback((offsetRow: number, offsetCol: number, keyPrefix: string) => {
     const tiles: React.ReactNode[] = [];
-    let designIndex = 0;
+  let designIndex = 0;
     
     // Center tile is at row 2, col 2 (0-indexed) within each grid section
     const centerRowInSection = Math.floor(ROWS / 2);
@@ -444,7 +444,7 @@ export function DesignSection() {
       for (let col = 0; col < COLS; col++) {
         const gridRow = offsetRow * ROWS + row + 1;
         const gridCol = offsetCol * COLS + col + 1;
-        
+
         // Center tile
         if (row === centerRowInSection && col === centerColInSection) {
           // Mark the CENTER grid's center tile (grid position 1,1 in the 3x3) for initial centering
@@ -506,7 +506,7 @@ export function DesignSection() {
               />
             </motion.div>
           );
-          designIndex++;
+      designIndex++;
         }
       }
     }
@@ -532,15 +532,23 @@ export function DesignSection() {
 
   return (
     <div className="w-full h-full bg-black">
+      <style>{`
+        @media (max-width: 767px) {
+          .design-grid-container {
+            transform: scale(0.75);
+            transform-origin: center center;
+          }
+        }
+      `}</style>
       <InfiniteCanvas 
         centerOnMount 
         infiniteScroll
         gridWidth={singleGridWidth}
         gridHeight={singleGridHeight}
         children={
-          <div
-            className="grid"
-            style={{
+        <div
+            className="grid design-grid-container"
+          style={{
               gridTemplateColumns: `repeat(${totalCols}, ${TILE_WIDTH}px)`,
               gridTemplateRows: `repeat(${totalRows}, ${TILE_HEIGHT}px)`,
               gap: `${GAP}px`,
@@ -548,7 +556,7 @@ export function DesignSection() {
             }}
           >
             {allTiles}
-          </div>
+        </div>
         }
       />
 

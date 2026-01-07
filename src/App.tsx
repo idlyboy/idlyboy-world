@@ -5,7 +5,6 @@ import { HomeSection } from "./components/sections/HomeSection";
 import { WorkSection } from "./components/sections/WorkSection";
 import { DesignSection } from "./components/sections/DesignSection";
 import { WritingSection } from "./components/sections/WritingSection";
-import { LifeSection } from "./components/sections/LifeSection";
 import { MousePositionProvider } from "./contexts/MousePositionContext";
 import { Toaster } from "sonner";
 
@@ -18,7 +17,6 @@ export default function App() {
     if (path.startsWith("/work")) return "Work";
     if (path.startsWith("/design")) return "Design";
     if (path.startsWith("/writing")) return "Writing";
-    if (path.startsWith("/life")) return "Life";
     return "Home";
   }, [location.pathname]);
 
@@ -36,9 +34,6 @@ export default function App() {
       case "Writing":
         navigate("/writing");
         break;
-      case "Life":
-        navigate("/life");
-        break;
       default:
         navigate("/home");
     }
@@ -47,9 +42,9 @@ export default function App() {
   return (
     <>
       <MousePositionProvider>
-        <div className="flex h-screen overflow-hidden bg-black flex-col md:flex-row">
-          <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
-          <main className="flex-1 overflow-hidden">
+      <div className="flex h-screen overflow-hidden bg-black flex-col md:flex-row">
+        <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
+        <main className="flex-1 overflow-hidden">
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomeSection />} />
@@ -58,11 +53,10 @@ export default function App() {
               <Route path="/design" element={<DesignSection />} />
               <Route path="/writing" element={<WritingSection />} />
               <Route path="/writing/:slug" element={<WritingSection />} />
-              <Route path="/life" element={<LifeSection />} />
               <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
-          </main>
-        </div>
+        </main>
+      </div>
       </MousePositionProvider>
       <Toaster position="bottom-right" theme="dark" />
     </>

@@ -238,11 +238,15 @@ interface WorkTileProps {
   imagePosition?: string;
   slug?: string;
   onClick?: () => void;
+  className?: string;
 }
 
-function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium', imagePosition = 'center', onClick }: WorkTileProps) {
+function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium', imagePosition = 'center', onClick, className = '' }: WorkTileProps) {
+  // Determine if this is a bottom row tile (Tring or Side Projects) - for mobile only
+  const isBottomRowTile = company === 'Tring' || company === 'Side Projects/Consulting';
+  
   return (
-    <Tile span={span} className="group cursor-pointer hover:bg-[#2a2a2a] transition-colors relative">
+    <Tile span={span} className={`group cursor-pointer hover:bg-[#2a2a2a] transition-colors relative work-tile ${className}`}>
       <div className="absolute inset-0" onClick={onClick}>
         <img 
           src={image} 
@@ -253,18 +257,18 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
       </div>
 
       {/* Text content - anchored to bottom */}
-      <div className="relative mt-auto px-6 pb-6 pt-20 flex flex-col gap-3 pointer-events-none"
+      <div className={`work-tile-content relative mt-auto px-6 pb-6 pt-20 flex flex-col gap-3 pointer-events-none ${isBottomRowTile ? 'work-tile-bottom-row' : ''}`}
            style={{
              background: 'linear-gradient(to bottom, transparent 0%, rgba(8, 8, 8, 0.6) 40%, rgba(8, 8, 8, 0.6) 60%, rgba(8, 8, 8, 0.9) 100%)'
            }}>
         {/* Company name (bottom-most in visual hierarchy, top-most in code) */}
-        <h3 className="text-white">{company}</h3>
+        <h3 className="text-white work-tile-company">{company}</h3>
         
         {/* Role */}
-        <p className="text-gray-400 text-sm">{role}</p>
+        <p className="text-gray-400 text-sm work-tile-role">{role}</p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 work-tile-tags">
           {tags.map((tag, index) => (
             <span
               key={index}
@@ -276,7 +280,7 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
         </div>
 
         {/* Date and link (at the very bottom) */}
-        <div className="flex items-center justify-between text-sm min-h-[20px] pointer-events-auto">
+        <div className="flex items-center justify-between text-sm min-h-[20px] pointer-events-auto work-tile-footer">
           <span className="text-gray-500">{dateRange}</span>
           {url && (
             <a
@@ -372,7 +376,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
   });
 
   const NavTile = () => (
-    <div className="col-span-1 row-span-1 grid grid-cols-2 grid-rows-2 gap-4">
+    <div className="work-detail-nav-tile col-span-1 row-span-1 grid grid-cols-2 grid-rows-2 gap-4 h-full">
       <div 
         className="bg-[#080808] rounded-lg overflow-hidden h-full w-full flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors group"
         onClick={() => work.url && window.open(work.url.startsWith('http') ? work.url : `https://${work.url}`, '_blank')}
@@ -417,8 +421,195 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
 
   return (
     <>
-    <TileGrid>
-      <Tile span="medium" glass>
+    {/* Mobile-only styles */}
+    <style>{`
+      @media (max-width: 767px) {
+        /* Make the container scrollable */
+        .work-detail-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          grid-auto-rows: min-content !important;
+          align-items: stretch !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+          height: 100% !important;
+          max-height: calc(100vh - 60px) !important;
+          -webkit-overflow-scrolling: touch !important;
+          padding-bottom: 1rem !important;
+        }
+        
+        /* Two-tile rows: height = width of one tile (square tiles) */
+        .work-detail-tile-1,
+        .work-detail-tile-3,
+        .work-detail-tile-5,
+        .work-detail-tile-6,
+        .work-detail-tile-7,
+        .work-detail-tile-8 {
+          aspect-ratio: 1 !important;
+          width: 100% !important;
+        }
+        
+        /* Override any Tailwind span classes on mobile */
+        .work-detail-grid > * {
+          max-width: 100% !important;
+        }
+        
+        /* Force equal column spans for two-tile rows */
+        .work-detail-tile-1,
+        .work-detail-tile-3,
+        .work-detail-tile-5,
+        .work-detail-tile-6,
+        .work-detail-tile-7,
+        .work-detail-tile-8 {
+          grid-column: span 1 !important;
+        }
+        
+        /* Row 1: Image (left) + NavTile (right) */
+        .work-detail-tile-1 { 
+          grid-column: 1 / span 1 !important; 
+          grid-row: 1 !important; 
+        }
+        .work-detail-tile-3 { 
+          grid-column: 2 / span 1 !important; 
+          grid-row: 1 !important; 
+        }
+        /* NavTile wrapper */
+        .work-detail-tile-3 {
+          aspect-ratio: 1 !important;
+          width: 100% !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+        /* NavTile internal spacing */
+        .work-detail-tile-3 .work-detail-nav-tile {
+          height: 100% !important;
+          gap: 8px !important;
+          padding: 0 !important;
+          flex: 1 !important;
+        }
+        
+        /* Row 2: Company name + role (full width) */
+        .work-detail-tile-2 { 
+          grid-column: 1 / -1 !important; 
+          grid-row: 2 !important; 
+        }
+        
+        /* Row 3: Pilot Partners/Growth Impact (left) + Mockup (right) */
+        .work-detail-tile-5 { 
+          grid-column: 1 / span 1 !important; 
+          grid-row: 3 !important; 
+        }
+        .work-detail-tile-6 { 
+          grid-column: 2 / span 1 !important; 
+          grid-row: 3 !important; 
+        }
+        
+        /* Row 4: "As Product Lead..." (full width) */
+        .work-detail-tile-4 { 
+          grid-column: 1 / -1 !important; 
+          grid-row: 4 !important; 
+        }
+        
+        /* Row 5: Image tiles */
+        .work-detail-tile-7 { 
+          grid-column: 1 / span 1 !important; 
+          grid-row: 5 !important; 
+        }
+        .work-detail-tile-8 { 
+          grid-column: 2 / span 1 !important; 
+          grid-row: 5 !important; 
+        }
+        
+        /* Row 6: "Our GTM experiments..." (full width) */
+        .work-detail-tile-9 { 
+          grid-column: 1 / -1 !important; 
+          grid-row: 6 !important; 
+        }
+        
+        /* Text tiles - ensure all text is visible */
+        .work-detail-text-tile {
+          min-height: auto !important;
+          height: auto !important;
+          max-height: none !important;
+          overflow: visible !important;
+        }
+        .work-detail-text-tile > div {
+          height: auto !important;
+          min-height: auto !important;
+          max-height: none !important;
+          overflow: visible !important;
+        }
+        .work-detail-text-tile .work-detail-content {
+          padding: 12px 16px !important;
+          gap: 6px !important;
+          min-height: fit-content !important;
+          height: auto !important;
+          max-height: none !important;
+          overflow: visible !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: flex-start !important;
+        }
+        .work-detail-text-tile .work-detail-content > div {
+          width: 100% !important;
+          flex-shrink: 0 !important;
+        }
+        .work-detail-text-tile h2 {
+          font-size: 18px !important;
+          line-height: 1.3 !important;
+        }
+        .work-detail-text-tile h3 {
+          font-size: 14px !important;
+        }
+        .work-detail-text-tile p {
+          font-size: 13px !important;
+          line-height: 1.4 !important;
+          overflow: visible !important;
+          text-overflow: clip !important;
+          white-space: normal !important;
+        }
+        
+        /* Company name tile - special styling */
+        .work-detail-company-tile h2 {
+          font-size: 20px !important;
+          font-weight: 500 !important;
+        }
+        
+        /* Pilot Partners tile - vertical centering */
+        .work-detail-tile-5 .pilot-partners-content {
+          justify-content: center !important;
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+        .work-detail-tile-5 .pilot-partners-content > div:last-child {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+        }
+        
+        /* Pratilipi growth tiles - smaller text */
+        .pratilipi-growth-tile h3 {
+          font-size: 0.7rem !important;
+        }
+        .pratilipi-growth-tile h2 {
+          font-size: 2.5rem !important;
+        }
+        .pratilipi-growth-tile p {
+          font-size: 0.65rem !important;
+        }
+        
+        /* Kleros growth tile - smaller text */
+        .kleros-growth-tile h3 {
+          font-size: 0.8rem !important;
+        }
+        .kleros-growth-tile h2 {
+          font-size: 2.5rem !important;
+        }
+        .kleros-growth-tile p {
+          font-size: 0.7rem !important;
+        }
+      }
+    `}</style>
+    <TileGrid className="work-detail-grid">
+      <Tile span="medium" glass className="work-detail-tile-1">
         <img 
           src={work.image} 
           alt={work.company} 
@@ -426,8 +617,8 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           style={{ objectPosition: work.imagePosition }}
         />
       </Tile>
-      <Tile span="wide" glass>
-        <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+      <Tile span="wide" glass className="work-detail-tile-2 work-detail-text-tile work-detail-company-tile">
+        <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
           <div className="flex flex-wrap items-baseline gap-2">
             <h2 className="text-xl text-white font-medium">{work.company}</h2>
             <h3 className="text-base text-gray-500">{work.role}</h3>
@@ -442,7 +633,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           {work.company === 'Pratilipi' && (
             <div className="flex flex-col gap-3">
               <p className="text-base text-gray-400">
-                Pratilipi is India’s largest storytelling platform, built to democratise literature in vernacular languages for internet users in India.
+                Pratilipi is India's largest storytelling platform, built to democratise literature in vernacular languages for internet users in India.
               </p>
               <p className="text-base text-gray-400">
                 I led onboarding and retention through our growth from 8-30Mn MAU.
@@ -481,10 +672,12 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           )}
         </div>
       </Tile>
-      <NavTile />
-      <Tile span="wide" glass>
+      <div className="work-detail-tile-3 col-span-1 row-span-1">
+        <NavTile />
+      </div>
+      <Tile span="wide" glass className="work-detail-tile-4 work-detail-text-tile">
         {work.company === 'Causality Network' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
              <div className="flex flex-col gap-3">
                <p className="text-base text-gray-400">
                  As Product Lead, I designed and engineered the MVP, where data-integrity attestations are made on Base via EAS, for neuroscientific datasets produced by EEG devices.
@@ -496,7 +689,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Pratilipi' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
              <div className="flex flex-col gap-3">
                <p className="text-base text-gray-400">
                  As a PM owning the new user journey, my goal was to improve M1 retention &amp; maximise MAU contribution.
@@ -508,7 +701,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Kleros' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               As Product Lead - Curate, I designed and launched Kleros Scout to productise submission and consumption of contract &amp; wallet insights.
             </p>
@@ -518,7 +711,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Tring' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               As Founding PM-designer, I led user research which drove our MVP feature set and designed the end-to-end UX.
             </p>
@@ -528,7 +721,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Side Projects/Consulting' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               Designed mockups for Peanut's payment links on Rabby and Butter Wallet and explored strategies for Peanut App's launch at Devconnect '25.
             </p>
@@ -538,9 +731,9 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
       </Tile>
-      <Tile span="medium" glass className={work.company === 'Causality Network' ? "!overflow-visible" : ""}>
+      <Tile span="medium" glass className={`work-detail-tile-5 ${work.company === 'Causality Network' ? "!overflow-visible" : ""}`}>
         {work.company === 'Causality Network' && (
-          <div className="flex flex-col items-center h-full gap-4 pt-10">
+          <div className="pilot-partners-content flex flex-col items-center h-full gap-4 pt-10">
             <h3 className="text-white text-center">Pilot Partners</h3>
             <div 
               ref={containerRef}
@@ -599,14 +792,14 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Kleros' && (
-          <div className="flex flex-col items-center justify-between h-full px-6 pt-8">
+          <div className="kleros-growth-tile flex flex-col items-center justify-between h-full px-6 pt-8">
             <h3 className="text-white text-center">Growth Impact</h3>
             <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>2x</h2>
             <p className="text-base text-gray-400 text-center mb-8">Weekly submissions and data consumed</p>
           </div>
         )}
         {work.company === 'Pratilipi' && (
-          <div className="relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
+          <div className="pratilipi-growth-tile relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
             <AnimatePresence mode="wait">
               <motion.div
                 key={pratilipiDataPoint}
@@ -646,7 +839,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
       </Tile>
-      <Tile span="medium" glass>
+      <Tile span="medium" glass className="work-detail-tile-6">
         {work.company === 'Causality Network' && (
           <WorkDesignTile
             image={causalityWorkexUi}
@@ -704,7 +897,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           />
         )}
       </Tile>
-      <Tile span="medium" glass>
+      <Tile span="medium" glass className="work-detail-tile-7">
         {work.company === 'Causality Network' && (
           <WorkDesignTile
             image={balajiXCausality}
@@ -747,7 +940,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           />
         )}
       </Tile>
-      <Tile span="medium" glass>
+      <Tile span="medium" glass className="work-detail-tile-8">
         {work.company === 'Causality Network' && (
           <div 
             className="w-full h-full relative group overflow-hidden cursor-pointer"
@@ -837,9 +1030,9 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           />
         )}
       </Tile>
-      <Tile span="wide" glass>
+      <Tile span="wide" glass className="work-detail-tile-9 work-detail-text-tile">
         {work.company === 'Causality Network' && (
-          <div className="px-12 py-6 flex flex-col gap-2 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-2 justify-center h-full">
             <p className="text-base text-gray-400">
               Our GTM experiments spanned commercial & academia.
             </p>
@@ -847,7 +1040,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
               → Pilot partnerships with Imperial College, Max Planck Institute, etc. to authenticate lab data
             </p>
             <p className="text-base text-gray-400">
-              → Neuroscience experiments at Balaji’s Network School
+              → Neuroscience experiments at Balaji's Network School
             </p>
             <p className="text-base text-gray-400">
               → Pilot with ad agency for consumer-brand insights
@@ -855,7 +1048,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Pratilipi' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               I designed all my experiments/features and the new user journey we built has stood tall through high acquisition phases (60-100K users daily @$0.2-0.3 CPI) and otherwise.
             </p>
@@ -865,7 +1058,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Kleros' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               Apart from productising contract security insights with a team of devs and BD, I reworked incentives mechanisms and contributed to tokenomics of new courts.
             </p>
@@ -875,7 +1068,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Tring' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               For user research, I spent hours at IT park smoking zones, as our ICPs hung out there. I did about 100 IRL interviews, 300 phone interviews apart from a 1000 person survey.
             </p>
@@ -885,7 +1078,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           </div>
         )}
         {work.company === 'Side Projects/Consulting' && (
-          <div className="px-12 py-6 flex flex-col gap-3 justify-center h-full">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <p className="text-base text-gray-400">
               Vibecoded a legal AI tool for document extraction and real estate due diligence; explored deterministic prompt interfaces for lawyers.
             </p>
@@ -1020,20 +1213,107 @@ export function WorkSection() {
   }
 
   return (
-    <TileGrid>
-      {workItems.map((item, index) => (
-        <WorkTile 
-          key={index} 
-          {...item} 
-          onClick={() => {
-            if (item.slug) {
-              navigate(`/work/${item.slug}`);
-            } else {
-              setSelectedWork(item);
-            }
-          }}
-        />
-      ))}
-    </TileGrid>
+    <>
+      <style>{`
+        /* Mobile-only work tab layout */
+        @media (max-width: 767px) {
+          /* Break height into 4 equal rows */
+          .work-tile-grid {
+            grid-template-rows: repeat(4, 1fr) !important;
+            grid-auto-rows: 0 !important;
+          }
+          
+          /* First 3 rows: full width */
+          .work-tile-causality { 
+            grid-column: 1 / -1 !important; 
+            grid-row: 1 !important;
+          }
+          .work-tile-kleros { 
+            grid-column: 1 / -1 !important; 
+            grid-row: 2 !important;
+          }
+          .work-tile-pratilipi { 
+            grid-column: 1 / -1 !important; 
+            grid-row: 3 !important;
+          }
+          
+          /* Bottom row: Tring and Side Projects side by side */
+          .work-tile-tring { 
+            grid-column: 1 !important; 
+            grid-row: 4 !important;
+          }
+          .work-tile-side-projects { 
+            grid-column: 2 !important; 
+            grid-row: 4 !important;
+          }
+          
+          /* Darker gradient overlay for better text readability */
+          .work-tile-content {
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.95) 100%) !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+            padding-bottom: 12px !important;
+            padding-top: 0 !important;
+            gap: 8px !important;
+          }
+          
+          /* Ensure all text appears on full-width tiles */
+          .work-tile-causality .work-tile-content,
+          .work-tile-kleros .work-tile-content,
+          .work-tile-pratilipi .work-tile-content {
+            min-height: auto;
+            justify-content: flex-end;
+          }
+          
+          /* Bottom row tiles: only show company and tags */
+          .work-tile-bottom-row .work-tile-role,
+          .work-tile-bottom-row .work-tile-footer {
+            display: none !important;
+          }
+          
+          /* Reduce text sizes slightly for better fit */
+          .work-tile-company {
+            font-size: 16px;
+            line-height: 1.3;
+          }
+          .work-tile-role {
+            font-size: 13px;
+            line-height: 1.4;
+          }
+          .work-tile-tags span {
+            font-size: 10px;
+            padding: 3px 6px;
+          }
+          .work-tile-footer {
+            font-size: 12px;
+          }
+        }
+      `}</style>
+      <TileGrid className="work-tile-grid">
+        {workItems.map((item, index) => {
+          let className = '';
+          if (item.company === 'Causality Network') className = 'work-tile-causality';
+          else if (item.company === 'Kleros') className = 'work-tile-kleros';
+          else if (item.company === 'Pratilipi') className = 'work-tile-pratilipi';
+          else if (item.company === 'Tring') className = 'work-tile-tring';
+          else if (item.company === 'Side Projects/Consulting') className = 'work-tile-side-projects';
+          
+          return (
+            <WorkTile 
+              key={index} 
+              {...item} 
+              className={className}
+              onClick={() => {
+                if (item.slug) {
+                  navigate(`/work/${item.slug}`);
+                } else {
+                  setSelectedWork(item);
+                }
+              }}
+            />
+          );
+        })}
+      </TileGrid>
+    </>
   );
 }
