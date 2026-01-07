@@ -197,7 +197,12 @@ export function HomeSection() {
             
             <motion.div
                 className="flex gap-6 items-center tool-stack-logos"
-              style={{ x: xTranslation }}
+              style={{ 
+                x: xTranslation,
+                willChange: 'transform',
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+              }}
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => {
                 setIsPaused(false);

@@ -1830,3 +1830,41 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* GPU acceleration fixes for mobile flickering */
+img,
+video,
+canvas,
+[style*="transform"],
+.tool-stack-logos,
+.tool-logo {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+
+/* Force GPU layer for motion elements */
+[style*="translate3d"],
+[style*="translateX"],
+[style*="translateY"] {
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Reduce backdrop-filter complexity on mobile */
+@media (max-width: 767px) {
+  [style*="backdrop-filter"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  
+  /* Ensure smooth animations on mobile */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
