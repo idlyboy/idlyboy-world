@@ -405,6 +405,11 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
              repeat: Infinity,
              ease: "linear"
            }}
+           style={{
+             willChange: 'transform',
+             backfaceVisibility: 'hidden',
+             WebkitBackfaceVisibility: 'hidden',
+           }}
          >
            {scrolledTags.map((tag, i) => (
              <span 
@@ -747,7 +752,12 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
               
               <motion.div
                 className="flex gap-6 items-center"
-                style={{ x: xTranslation }}
+                style={{ 
+                  x: xTranslation,
+                  willChange: 'transform',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                }}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => {
                   setIsPaused(false);
@@ -808,6 +818,11 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0 flex flex-col items-center justify-between px-6 pt-8"
+                style={{
+                  willChange: 'opacity',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                }}
               >
                 {pratilipiDataPoint === 0 ? (
                   <>
