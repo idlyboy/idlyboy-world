@@ -1,8 +1,12 @@
 /**
- * Cloudinary Bulk Upload Script (Simplified)
+ * Cloudinary Bulk Upload Script
  * 
  * Usage:
- * 1. npm install cloudinary
+ * 1. Create a .env file in project root with your credentials:
+ *    CLOUDINARY_CLOUD_NAME=your_cloud_name
+ *    CLOUDINARY_API_KEY=your_api_key
+ *    CLOUDINARY_API_SECRET=your_api_secret
+ * 
  * 2. Run: node scripts/upload-to-cloudinary.js
  */
 
@@ -10,11 +14,27 @@ const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
 
-// Cloudinary credentials
+// Load environment variables from .env file
+require('dotenv').config();
+
+// Cloudinary credentials from environment variables
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+if (!cloudName || !apiKey || !apiSecret) {
+  console.error('❌ Missing Cloudinary credentials!');
+  console.error('Create a .env file in project root with:');
+  console.error('  CLOUDINARY_CLOUD_NAME=your_cloud_name');
+  console.error('  CLOUDINARY_API_KEY=your_api_key');
+  console.error('  CLOUDINARY_API_SECRET=your_api_secret');
+  process.exit(1);
+}
+
 cloudinary.config({
-  cloud_name: 'dqu56ahai',
-  api_key: 'REMOVED_API_KEY',
-  api_secret: 'REMOVED_API_SECRET'
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret
 });
 
 const ASSETS_DIR = path.join(__dirname, '../src/assets');
@@ -68,6 +88,7 @@ async function uploadFile(filePath, fileName) {
 
 async function main() {
   console.log('🚀 Starting Cloudinary upload...\n');
+  console.log(`Using cloud: ${cloudName}\n`);
   
   // Test connection first
   try {
@@ -114,7 +135,7 @@ async function main() {
  * Generated: ${new Date().toISOString()}
  */
 
-const CLOUD_NAME = 'dqu56ahai';
+const CLOUD_NAME = '${cloudName}';
 
 export const cloudinaryAssets: Record<string, { publicId: string; resourceType: string }> = {
 ${results.map(r => `  '${r.originalName}': { publicId: '${r.publicId}', resourceType: '${r.resourceType}' },`).join('\n')}
@@ -146,6 +167,18 @@ export function getCloudinaryRawUrl(filename: string): string {
   const asset = cloudinaryAssets[filename];
   if (!asset) return '';
   return \`https://res.cloudinary.com/\${CLOUD_NAME}/\${asset.resourceType}/upload/\${asset.publicId}\`;
+}
+
+/**
+ * Convert a Cloudinary thumbnail URL to medium/original size
+ * Use this in modals to show higher resolution images
+ */
+export function getHighResUrl(thumbnailUrl: string): string {
+  if (!thumbnailUrl || !thumbnailUrl.includes('res.cloudinary.com')) {
+    return thumbnailUrl; // Not a Cloudinary URL, return as-is
+  }
+  // Replace thumbnail transformation (w_400) with medium (w_1200)
+  return thumbnailUrl.replace('w_400,c_scale,', 'w_1200,c_scale,');
 }
 `;
 
