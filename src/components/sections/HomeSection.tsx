@@ -10,7 +10,7 @@ import { getImageKitUrl } from '../../imagekit-urls';
 const georgiaHikeImg = getImageKitUrl('georgia hike.jpg', 'medium');
 
 // ImageKit URLs - using 'medium' for tiles, 'thumbnail' for small icons/logos
-const tradingImage = getImageKitUrl('1fb9888ffac30fdf23539e25315c628ebc8f6884.png', 'medium');
+const tradingVideo = getImageKitUrl('perps_orderbook_animation.mp4', 'original');
 const calendarIcon = getImageKitUrl('ad9e72c4f8cacd3702a57f7914f071255ab7a2ed.png', 'thumbnail');
 const emailIcon = getImageKitUrl('9593450cb8b78e77237863ee5a02267d42340789.png', 'thumbnail');
 const linkedinIcon = getImageKitUrl('f1ba35bb4fd41e1b9a71c24479b836c57e7d1586.png', 'thumbnail');
@@ -175,9 +175,16 @@ export function HomeSection() {
           </a>
         ]}
       </SubdividedTile>
-        {/* T4: Trading GIF */}
+        {/* T4: Trading Video */}
         <Tile span="medium" glass className="home-tile-4">
-        <img src={tradingImage} alt="Trading interface" className="w-full h-full object-cover object-center" />
+        <video 
+          src={tradingVideo} 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+          className="w-full h-full object-cover object-center"
+        />
       </Tile>
         {/* T5: PM-Designer text */}
         <Tile span="wide" glass className="home-tile-5">

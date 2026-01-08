@@ -7,12 +7,11 @@ const IMAGEKIT_ID = 'hlunqgyt7';
 const URL_ENDPOINT = 'https://ik.imagekit.io/hlunqgyt7';
 
 export const imagekitAssets: Record<string, { filePath: string }> = {
-  '0059f544ee1e78aa6b22d4edf724f1f96fd42a20.png': { filePath: '/idlyboy/0059f544ee1e78aa6b22d4edf724f1f96fd42a20.png' },
   '0088e1d71d0e2f8436e288f9c285bab7b13b7f2c.png': { filePath: '/idlyboy/0088e1d71d0e2f8436e288f9c285bab7b13b7f2c.png' },
   '0297020406e76a9925410ff783ce9aebd882a31e.png': { filePath: '/idlyboy/0297020406e76a9925410ff783ce9aebd882a31e.png' },
   '0b7e55b840e033a7ac832270c171ae6cdbbc406d.png': { filePath: '/idlyboy/0b7e55b840e033a7ac832270c171ae6cdbbc406d.png' },
   '111.png': { filePath: '/idlyboy/111.png' },
-  '1fb9888ffac30fdf23539e25315c628ebc8f6884.png': { filePath: '/idlyboy/1fb9888ffac30fdf23539e25315c628ebc8f6884.png' },
+  'perps_orderbook_animation.mp4': { filePath: '/idlyboy/perps_orderbook_animation.mp4' },
   '20e638b6781b1accf1eb0f1c8a7447e887529c00.png': { filePath: '/idlyboy/20e638b6781b1accf1eb0f1c8a7447e887529c00.png' },
   '2bb6cb2d4dff2cca9e7b0eb0110f8acac9ebf519.png': { filePath: '/idlyboy/2bb6cb2d4dff2cca9e7b0eb0110f8acac9ebf519.png' },
   '372acaaf8adf70ed5b3d005b609ac106043f4128.png': { filePath: '/idlyboy/372acaaf8adf70ed5b3d005b609ac106043f4128.png' },

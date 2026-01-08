@@ -200,7 +200,6 @@ const sideProjectsImg = getImageKitUrl("7a7730582151772e984109aab889ff7f446cd66b
 const tringImg = getImageKitUrl("8ca4b23ff1b62ab8ad88c6732101f2d4996988d9.png", "medium");
 
 // Work detail view images - medium size (1200px)
-const causalityBioreactorGif = getImageKitUrl("0059f544ee1e78aa6b22d4edf724f1f96fd42a20.png", "medium");
 const causalityBalaji1 = getImageKitUrl("c853ee53c2b660a7b602ed02ff8c8db42d96b37f.png", "medium");
 const causalityBalaji2 = getImageKitUrl("a75c7af7f7ba5692a75e77222ac72ec31d30386d.png", "medium");
 const causalityNeuromarketing = getImageKitUrl("0297020406e76a9925410ff783ce9aebd882a31e.png", "medium");
