@@ -4,13 +4,13 @@ import { Tile } from '../Tile';
 import { TileGrid } from '../TileGrid';
 import AsciiBrain from '../AsciiBrain';
 import { SubdividedTile } from '../SubdividedTile';
-import { getImageKitUrl } from '../../imagekit-urls';
+import { getImageKitUrl, getImageKitRawUrl } from '../../imagekit-urls';
 
 // Georgia hike photo (replaced 45MB motorcycle GIF)
 const georgiaHikeImg = getImageKitUrl('georgia hike.jpg', 'medium');
 
 // ImageKit URLs - using 'medium' for tiles, 'thumbnail' for small icons/logos
-const tradingVideo = getImageKitUrl('perps_orderbook_animation.mp4', 'original');
+const tradingVideo = getImageKitRawUrl('perps_orderbook_animation.mp4');
 const calendarIcon = getImageKitUrl('ad9e72c4f8cacd3702a57f7914f071255ab7a2ed.png', 'thumbnail');
 const emailIcon = getImageKitUrl('9593450cb8b78e77237863ee5a02267d42340789.png', 'thumbnail');
 const linkedinIcon = getImageKitUrl('f1ba35bb4fd41e1b9a71c24479b836c57e7d1586.png', 'thumbnail');
