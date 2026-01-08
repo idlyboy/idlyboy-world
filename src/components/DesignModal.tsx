@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
+import { getHighResUrl } from '../cloudinary-urls';
 
 interface DesignModalProps {
   isOpen: boolean;
@@ -208,7 +209,7 @@ export function DesignModal({
             {image && (
               <div className="w-full flex items-center justify-center overflow-hidden rounded-lg">
                 <img
-                  src={image}
+                  src={getHighResUrl(image || '')}
                   alt={title || 'Design'}
                   className="w-full h-auto object-contain"
                 />
