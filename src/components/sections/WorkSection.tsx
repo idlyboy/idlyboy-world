@@ -190,49 +190,49 @@ function WorkDesignTile({
     </div>
   );
 }
-import { getCloudinaryUrl, getCloudinaryRawUrl } from "../../cloudinary-urls";
+import { getImageKitUrl, getImageKitRawUrl } from "../../imagekit-urls";
 
 // Work tab tile backgrounds - medium size (1200px)
-const pratilipiImg = getCloudinaryUrl("e2f264f6b30b71e8e14fca1ef3158cfc8c2426f9.png", "medium");
-const causalityImg = getCloudinaryUrl("d1bd499ef33469cafbd36bce53b70f842ff21394.png", "medium");
-const klerosImg = getCloudinaryUrl("4adf5b708eba98dfc09a1a706e57febd861083fc.png", "medium");
-const sideProjectsImg = getCloudinaryUrl("7a7730582151772e984109aab889ff7f446cd66b.png", "medium");
-const tringImg = getCloudinaryUrl("8ca4b23ff1b62ab8ad88c6732101f2d4996988d9.png", "medium");
+const pratilipiImg = getImageKitUrl("e2f264f6b30b71e8e14fca1ef3158cfc8c2426f9.png", "medium");
+const causalityImg = getImageKitUrl("d1bd499ef33469cafbd36bce53b70f842ff21394.png", "medium");
+const klerosImg = getImageKitUrl("4adf5b708eba98dfc09a1a706e57febd861083fc.png", "medium");
+const sideProjectsImg = getImageKitUrl("7a7730582151772e984109aab889ff7f446cd66b.png", "medium");
+const tringImg = getImageKitUrl("8ca4b23ff1b62ab8ad88c6732101f2d4996988d9.png", "medium");
 
 // Work detail view images - medium size (1200px)
-const causalityBioreactorGif = getCloudinaryUrl("0059f544ee1e78aa6b22d4edf724f1f96fd42a20.png", "medium");
-const causalityBalaji1 = getCloudinaryUrl("c853ee53c2b660a7b602ed02ff8c8db42d96b37f.png", "medium");
-const causalityBalaji2 = getCloudinaryUrl("a75c7af7f7ba5692a75e77222ac72ec31d30386d.png", "medium");
-const causalityNeuromarketing = getCloudinaryUrl("0297020406e76a9925410ff783ce9aebd882a31e.png", "medium");
-const amplitudeCaseStudyImg = getCloudinaryUrl("cd60624f3996afc92460d14d7457ae655c409d6f.png", "medium");
-const pratilipiLanguageScreen = getCloudinaryUrl("6e1d5cb6998308302bbf94f6d4779152cd11e550.png", "medium");
-const pratilipiLoginScreen = getCloudinaryUrl("e3d4d917233b2a400c5f09159992f2ab28a6b380.png", "medium");
-const klerosMetaMask = getCloudinaryUrl("44cfe9985642247e29a06f6db31933ad95088f56.png", "medium");
-const klerosScout = getCloudinaryUrl("d485154df3065e4398ba92f69db0eda409c47ac1.png", "medium");
-const klerosTokens = getCloudinaryUrl("679dcc21ea1ec324dc2f38b434f58229fd9b6096.png", "medium");
-const klerosTokenList = getCloudinaryUrl("6ef5d1608b5121a806fd9e5a0a0aeb23da2636ac.png", "medium");
-const tringNotificationImg = getCloudinaryUrl("e58087eed387584ba2529fe3efbe4e4da1e45500.png", "medium");
-const tringOnboardingImg = getCloudinaryUrl("a1555cb8bf389a1162466d2a1688db35576f4976.png", "medium");
-const causalityWorkexUi = getCloudinaryUrl("night_causality workex ui.png", "medium");
-const balajiXCausality = getCloudinaryUrl("balaji x causality.png", "medium");
-const neurolensWebsiteTile = getCloudinaryUrl("neurolens website tile.png", "medium");
-const tringPermissionWebsiteSquare = getCloudinaryUrl("night_Tring - Permission website square.png", "medium");
-const tringCaseStudyImg = getCloudinaryUrl("111.png", "medium");
-const rabbyPayWithLinksTile = getCloudinaryUrl("night_Rabby - Pay with linkswebsite tile.png", "medium");
-const rwaziElaIntroTile = getCloudinaryUrl("night_Rwazi - Ela Introwebsite tile.png", "medium");
-const legalFlowCasesDashboardTile = getCloudinaryUrl("night_LegalFlow - Cases Dashboardwebsite tile.png", "medium");
-const legalFlowPromptBuilderTile = getCloudinaryUrl("night_LegalFlow - Prompt Builderwebsite tile.png", "medium");
+const causalityBioreactorGif = getImageKitUrl("0059f544ee1e78aa6b22d4edf724f1f96fd42a20.png", "medium");
+const causalityBalaji1 = getImageKitUrl("c853ee53c2b660a7b602ed02ff8c8db42d96b37f.png", "medium");
+const causalityBalaji2 = getImageKitUrl("a75c7af7f7ba5692a75e77222ac72ec31d30386d.png", "medium");
+const causalityNeuromarketing = getImageKitUrl("0297020406e76a9925410ff783ce9aebd882a31e.png", "medium");
+const amplitudeCaseStudyImg = getImageKitUrl("cd60624f3996afc92460d14d7457ae655c409d6f.png", "medium");
+const pratilipiLanguageScreen = getImageKitUrl("6e1d5cb6998308302bbf94f6d4779152cd11e550.png", "medium");
+const pratilipiLoginScreen = getImageKitUrl("e3d4d917233b2a400c5f09159992f2ab28a6b380.png", "medium");
+const klerosMetaMask = getImageKitUrl("44cfe9985642247e29a06f6db31933ad95088f56.png", "medium");
+const klerosScout = getImageKitUrl("d485154df3065e4398ba92f69db0eda409c47ac1.png", "medium");
+const klerosTokens = getImageKitUrl("679dcc21ea1ec324dc2f38b434f58229fd9b6096.png", "medium");
+const klerosTokenList = getImageKitUrl("6ef5d1608b5121a806fd9e5a0a0aeb23da2636ac.png", "medium");
+const tringNotificationImg = getImageKitUrl("e58087eed387584ba2529fe3efbe4e4da1e45500.png", "medium");
+const tringOnboardingImg = getImageKitUrl("a1555cb8bf389a1162466d2a1688db35576f4976.png", "medium");
+const causalityWorkexUi = getImageKitUrl("night_causality workex ui.png", "medium");
+const balajiXCausality = getImageKitUrl("balaji x causality.png", "medium");
+const neurolensWebsiteTile = getImageKitUrl("neurolens website tile.png", "medium");
+const tringPermissionWebsiteSquare = getImageKitUrl("night_Tring - Permission website square.png", "medium");
+const tringCaseStudyImg = getImageKitUrl("111.png", "medium");
+const rabbyPayWithLinksTile = getImageKitUrl("night_Rabby - Pay with linkswebsite tile.png", "medium");
+const rwaziElaIntroTile = getImageKitUrl("night_Rwazi - Ela Introwebsite tile.png", "medium");
+const legalFlowCasesDashboardTile = getImageKitUrl("night_LegalFlow - Cases Dashboardwebsite tile.png", "medium");
+const legalFlowPromptBuilderTile = getImageKitUrl("night_LegalFlow - Prompt Builderwebsite tile.png", "medium");
 
 // Small logos - thumbnail size (400px)
-const maxPlanckLogo = getCloudinaryUrl("max planck.png", "thumbnail");
-const imperialCollegeLogo = getCloudinaryUrl("imperial college.png", "thumbnail");
-const kingsCollegeLogo = getCloudinaryUrl("kings college.png", "thumbnail");
-const opencellLogo = getCloudinaryUrl("opencell.png", "thumbnail");
-const bristolLogo = getCloudinaryUrl("bristol.png", "thumbnail");
-const wisconsinLogo = getCloudinaryUrl("wisconsin.png", "thumbnail");
+const maxPlanckLogo = getImageKitUrl("max planck.png", "thumbnail");
+const imperialCollegeLogo = getImageKitUrl("imperial college.png", "thumbnail");
+const kingsCollegeLogo = getImageKitUrl("kings college.png", "thumbnail");
+const opencellLogo = getImageKitUrl("opencell.png", "thumbnail");
+const bristolLogo = getImageKitUrl("bristol.png", "thumbnail");
+const wisconsinLogo = getImageKitUrl("wisconsin.png", "thumbnail");
 
 // PDF stays as raw
-const neurolensReport = getCloudinaryRawUrl("Final NeuroLens Case Study Report (1) (1)_compressed.pdf");
+const neurolensReport = getImageKitRawUrl("Final NeuroLens Case Study Report (1) (1)_compressed.pdf");
 
 interface WorkTileProps {
   company: string;

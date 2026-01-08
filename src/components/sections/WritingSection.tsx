@@ -8,12 +8,12 @@ import { HyperliquidJourneyContent } from '../../content/articles/hyperliquid-jo
 import { GetRealAboutPeaqOnboardingContent } from '../../content/articles/get-real-about-peaq-onboarding';
 import { GrowingMatchaDexVolumeShareContent } from '../../content/articles/growing-matcha-dex-volume-share';
 
-// Article banners from Cloudinary - medium size (1200px)
-import { getCloudinaryUrl } from '../../cloudinary-urls';
-const dexSwapBanner = getCloudinaryUrl('dex swap ui banner.png', 'medium');
-const hyperliquidBanner = getCloudinaryUrl('hyperliquid_banner.webp', 'medium');
-const peaqBanner = getCloudinaryUrl('peaq_banner.webp', 'medium');
-const matchaBanner = getCloudinaryUrl('matcha_banner.webp', 'medium');
+// Article banners from ImageKit - medium size (1200px)
+import { getImageKitUrl } from '../../imagekit-urls';
+const dexSwapBanner = getImageKitUrl('dex swap ui banner.png', 'medium');
+const hyperliquidBanner = getImageKitUrl('hyperliquid_banner.webp', 'medium');
+const peaqBanner = getImageKitUrl('peaq_banner.webp', 'medium');
+const matchaBanner = getImageKitUrl('matcha_banner.webp', 'medium');
 
 // Types for writing pieces
 interface WritingPiece {

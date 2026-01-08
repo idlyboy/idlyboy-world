@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
-import { useEffect, useRef, useMemo } from 'react';
-import { getHighResUrl } from '../cloudinary-urls';
+import { useEffect, useRef } from 'react';
+import { getHighResUrl } from '../imagekit-urls';
 
 interface DesignModalProps {
   isOpen: boolean;
