@@ -1,4 +1,4 @@
-import { ReactNode, memo, useRef, useEffect, useState } from 'react';
+import { ReactNode, memo, useRef, useEffect, useState, useCallback } from 'react';
 import { useMousePosition } from '../contexts/MousePositionContext';
 import { getIsDragging } from './InfiniteCanvas';
 
@@ -10,6 +10,13 @@ interface DesignTileProps {
   onClick?: () => void;
   isCenter?: boolean;
 }
+
+// Loading skeleton component
+const LoadingSkeleton = () => (
+  <div className="absolute inset-0 bg-gray-900 animate-pulse">
+    <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 animate-shimmer" />
+  </div>
+);
 
 // Memoized to prevent re-renders during parent updates
 export const DesignTile = memo(function DesignTile({
@@ -193,12 +200,18 @@ export const DesignTile = memo(function DesignTile({
     );
   }
 
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   const handleClick = () => {
     // Only trigger click if we weren't dragging
     if (!getIsDragging() && onClick) {
       onClick();
     }
   };
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
+  }, []);
 
   return (
     <div
@@ -211,6 +224,9 @@ export const DesignTile = memo(function DesignTile({
         transform: 'translateZ(0)',
       }}
     >
+      {/* Loading skeleton - shown while image loads */}
+      {image && !imageLoaded && <LoadingSkeleton />}
+      
       {component ? (
         <div className="w-[2800px] h-[2000px] origin-top-left" style={{ transform: 'scale(0.11214)' }}>
           {component}
@@ -219,12 +235,15 @@ export const DesignTile = memo(function DesignTile({
         <img
           src={image}
           alt={title || 'Design'}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out"
+          className={`w-full h-full object-cover transition-all duration-500 ease-out ${
+            imageLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
           style={{
             transform: isHovered ? 'scale(1.08)' : 'scale(1)',
           }}
           loading="lazy"
           decoding="async"
+          onLoad={handleImageLoad}
         />
       ) : null}
 

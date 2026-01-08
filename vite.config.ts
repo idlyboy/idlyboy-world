@@ -1,6 +1,7 @@
 
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
+  import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
   import path from 'path';
 
   export default defineConfig({
@@ -16,6 +17,19 @@
           }
         },
       },
+      // Image optimization - compress PNGs and convert to WebP
+      ViteImageOptimizer({
+        png: {
+          quality: 80,
+        },
+        jpeg: {
+          quality: 80,
+        },
+        webp: {
+          quality: 80,
+          lossless: false,
+        },
+      }),
     ],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -26,6 +40,18 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      // Enable better chunking for assets
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'design-images': [
+              './src/assets/night_Bookworm - Clubs.png',
+              './src/assets/night_Bookworm - Discover Books.png',
+              './src/assets/night_Bookworm - Feed.png',
+            ],
+          },
+        },
+      },
     },
     server: {
       port: 3000,
