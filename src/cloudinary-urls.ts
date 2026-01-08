@@ -119,9 +119,9 @@ export function getCloudinaryUrl(filename: string, size: ImageSize = 'original')
     return `https://res.cloudinary.com/${CLOUD_NAME}/raw/upload/${publicId}`;
   }
 
-  let transform = 'f_auto,q_auto';
-  if (size === 'thumbnail') transform = 'w_400,c_scale,f_auto,q_auto';
-  if (size === 'medium') transform = 'w_1200,c_scale,f_auto,q_auto';
+  // Note: Width scaling (w_400, w_1200) requires paid Cloudinary plan
+  // Using f_auto,q_auto for auto format (WebP/AVIF) and quality optimization
+  const transform = 'f_auto,q_auto';
 
   return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${transform}/${publicId}`;
 }
@@ -133,13 +133,8 @@ export function getCloudinaryRawUrl(filename: string): string {
 }
 
 /**
- * Convert a Cloudinary thumbnail URL to medium/original size
- * Use this in modals to show higher resolution images
+ * Get high-res URL (same as input since we're not using width scaling on free tier)
  */
 export function getHighResUrl(thumbnailUrl: string): string {
-  if (!thumbnailUrl || !thumbnailUrl.includes('res.cloudinary.com')) {
-    return thumbnailUrl; // Not a Cloudinary URL, return as-is
-  }
-  // Replace thumbnail transformation (w_400) with medium (w_1200)
-  return thumbnailUrl.replace('w_400,c_scale,', 'w_1200,c_scale,');
+  return thumbnailUrl;
 }
