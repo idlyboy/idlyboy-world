@@ -7,23 +7,23 @@ import { SubdividedTile } from '../SubdividedTile';
 import { getCloudinaryUrl } from '../../cloudinary-urls';
 
 // Georgia hike photo (replaced 45MB motorcycle GIF)
-const georgiaHikeImg = getCloudinaryUrl('georgia hike.jpg');
+const georgiaHikeImg = getCloudinaryUrl('georgia hike.jpg', 'medium');
 
-// Cloudinary URLs for all other images
-const tradingImage = getCloudinaryUrl('1fb9888ffac30fdf23539e25315c628ebc8f6884.png');
-const calendarIcon = getCloudinaryUrl('ad9e72c4f8cacd3702a57f7914f071255ab7a2ed.png');
-const emailIcon = getCloudinaryUrl('9593450cb8b78e77237863ee5a02267d42340789.png');
-const linkedinIcon = getCloudinaryUrl('f1ba35bb4fd41e1b9a71c24479b836c57e7d1586.png');
-const telegramIcon = getCloudinaryUrl('6b224fb116e0caa3076a021ae6c5e57427d9b894.png');
-const amplitudeLogo = getCloudinaryUrl('372acaaf8adf70ed5b3d005b609ac106043f4128.png');
-const figmaLogo = getCloudinaryUrl('2bb6cb2d4dff2cca9e7b0eb0110f8acac9ebf519.png');
-const chatgptLogo = getCloudinaryUrl('68f23de2bd5734f8e24655571d20f47cdfbb9d60.png');
-const jiraLogo = getCloudinaryUrl('0b7e55b840e033a7ac832270c171ae6cdbbc406d.png');
-const etherscanLogo = getCloudinaryUrl('c0767c776d80904df3ca4f053cde3e4a321a50cf.png');
-const adobeLogo = getCloudinaryUrl('d6961e7af8c29d7b9b852f65aa2d369f2e816e39.png');
-const defillamaLogo = getCloudinaryUrl('20e638b6781b1accf1eb0f1c8a7447e887529c00.png');
-const duneLogo = getCloudinaryUrl('bc1efdeea92fdb2470b2dea1a8dbe2bf6d59cc0c.png');
-const potpieLogo = getCloudinaryUrl('67912ee6fd693dc6c36117524ea8e2931e8e2c2d.png');
+// Cloudinary URLs - using 'medium' for tiles, 'thumbnail' for small icons/logos
+const tradingImage = getCloudinaryUrl('1fb9888ffac30fdf23539e25315c628ebc8f6884.png', 'medium');
+const calendarIcon = getCloudinaryUrl('ad9e72c4f8cacd3702a57f7914f071255ab7a2ed.png', 'thumbnail');
+const emailIcon = getCloudinaryUrl('9593450cb8b78e77237863ee5a02267d42340789.png', 'thumbnail');
+const linkedinIcon = getCloudinaryUrl('f1ba35bb4fd41e1b9a71c24479b836c57e7d1586.png', 'thumbnail');
+const telegramIcon = getCloudinaryUrl('6b224fb116e0caa3076a021ae6c5e57427d9b894.png', 'thumbnail');
+const amplitudeLogo = getCloudinaryUrl('372acaaf8adf70ed5b3d005b609ac106043f4128.png', 'thumbnail');
+const figmaLogo = getCloudinaryUrl('2bb6cb2d4dff2cca9e7b0eb0110f8acac9ebf519.png', 'thumbnail');
+const chatgptLogo = getCloudinaryUrl('68f23de2bd5734f8e24655571d20f47cdfbb9d60.png', 'thumbnail');
+const jiraLogo = getCloudinaryUrl('0b7e55b840e033a7ac832270c171ae6cdbbc406d.png', 'thumbnail');
+const etherscanLogo = getCloudinaryUrl('c0767c776d80904df3ca4f053cde3e4a321a50cf.png', 'thumbnail');
+const adobeLogo = getCloudinaryUrl('d6961e7af8c29d7b9b852f65aa2d369f2e816e39.png', 'thumbnail');
+const defillamaLogo = getCloudinaryUrl('20e638b6781b1accf1eb0f1c8a7447e887529c00.png', 'thumbnail');
+const duneLogo = getCloudinaryUrl('bc1efdeea92fdb2470b2dea1a8dbe2bf6d59cc0c.png', 'thumbnail');
+const potpieLogo = getCloudinaryUrl('67912ee6fd693dc6c36117524ea8e2931e8e2c2d.png', 'thumbnail');
 
 export function HomeSection() {
   const [isPaused, setIsPaused] = useState(false);
