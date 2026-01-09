@@ -147,16 +147,16 @@ export function HomeSection() {
         }
       `}</style>
       <TileGrid>
+        {/* T2: ASCII Brain */}
+        <Tile span="medium" glass className="home-tile-2">
+          <AsciiBrain theme="dark" />
+        </Tile>
         {/* T1: Wide intro */}
         <Tile span="wide" glass className="home-tile-1">
           <div className="wide-tile-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
             <h2 className="text-white">Hi, I'm Akhil —</h2>
             <p className="text-gray-400">A product architect with a designer's eye and systems thinker's brain.</p>
           </div>
-        </Tile>
-        {/* T2: ASCII Brain */}
-        <Tile span="medium" glass className="home-tile-2">
-          <AsciiBrain theme="dark" />
         </Tile>
         {/* T3: Contact icons */}
         <SubdividedTile span="medium" glass className="home-tile-3">
@@ -251,10 +251,7 @@ export function HomeSection() {
         </Tile>
         {/* T7: Empty */}
         <Tile span="medium" glass className="home-tile-7">
-        </Tile>
-        {/* T8: Georgia Hike Photo */}
-        <Tile span="medium" glass className="home-tile-8">
-          <img src={georgiaHikeImg} alt="Georgia Hike" className="w-full h-full object-cover" />
+          {null}
         </Tile>
         {/* T9: Travel text */}
         <Tile span="wide" glass className="home-tile-9">
@@ -262,6 +259,10 @@ export function HomeSection() {
             <p className="text-gray-400">I spend my days & nights building, evenings scoring goals, and in between — ride motorcycles & pet cats.</p>
             <p className="text-gray-400 mt-4">I also love to travel, collecting wicked stories from the 20 countries I've visited 🎢</p>
           </div>
+        </Tile>
+        {/* T8: Georgia Hike Photo */}
+        <Tile span="medium" glass className="home-tile-8">
+          <img src={georgiaHikeImg} alt="Georgia Hike" className="w-full h-full object-cover" />
         </Tile>
       </TileGrid>
     </>

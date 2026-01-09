@@ -13,7 +13,7 @@ export function Tile({ children, className = '', span = 'medium', glass = false 
   const { mousePos } = useMousePosition();
   const [effectIntensity, setEffectIntensity] = useState(0);
   const [gradientOrigin, setGradientOrigin] = useState({ x: 50, y: 50 });
-  
+
   const spanClasses = {
     small: 'col-span-1 row-span-1',
     medium: 'col-span-1 row-span-1',
@@ -31,17 +31,17 @@ export function Tile({ children, className = '', span = 'medium', glass = false 
     const rect = tileRef.current.getBoundingClientRect();
     const tileCenterX = rect.left + rect.width / 2;
     const tileCenterY = rect.top + rect.height / 2;
-    
+
     const distance = Math.sqrt(
-      Math.pow(mousePos.x - tileCenterX, 2) + 
+      Math.pow(mousePos.x - tileCenterX, 2) +
       Math.pow(mousePos.y - tileCenterY, 2)
     );
-    
+
     const maxRadius = 220;
     const intensity = Math.max(0, 1 - distance / maxRadius);
-    
+
     setEffectIntensity(intensity);
-    
+
     const relX = ((mousePos.x - rect.left) / rect.width) * 100;
     const relY = ((mousePos.y - rect.top) / rect.height) * 100;
     setGradientOrigin({ x: relX, y: relY });
