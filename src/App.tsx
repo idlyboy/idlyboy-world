@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { HomeSection } from "./components/sections/HomeSection";
@@ -11,6 +11,22 @@ import { Toaster } from "sonner";
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Fix for mobile viewport height to prevent overflow
+  const [height, setHeight] = useState('100vh');
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setHeight(`${window.innerHeight}px`);
+    };
+
+    // Initial set
+    updateHeight();
+
+    // Update on resize
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   const activeSection = useMemo(() => {
     const path = location.pathname.toLowerCase();
@@ -42,9 +58,12 @@ export default function App() {
   return (
     <>
       <MousePositionProvider>
-      <div className="flex h-screen overflow-hidden bg-black flex-col md:flex-row">
-        <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
-        <main className="flex-1 overflow-hidden">
+        <div
+          className="flex overflow-hidden bg-black flex-col md:flex-row"
+          style={{ height: height }}
+        >
+          <Navigation activeSection={activeSection} onSectionChange={handleSectionChange} />
+          <main className="flex-1 overflow-hidden">
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<HomeSection />} />
@@ -55,8 +74,8 @@ export default function App() {
               <Route path="/writing/:slug" element={<WritingSection />} />
               <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
-        </main>
-      </div>
+          </main>
+        </div>
       </MousePositionProvider>
       <Toaster position="bottom-right" theme="dark" />
     </>

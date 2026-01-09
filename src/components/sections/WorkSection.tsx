@@ -320,33 +320,7 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
 
 
 function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => void }) {
-  // Mobile scroll restriction logic
-  useEffect(() => {
-    const handleScroll = () => {
-      // Only apply on mobile (768px matches existing media queries)
-      if (window.innerWidth >= 768) return;
-
-      const grid = document.querySelector('.work-detail-grid');
-      if (!grid) return;
-
-      const fullContentHeight = grid.scrollHeight;
-      const restrictedHeight = fullContentHeight * 0.85; // 85% of content
-
-      // If scrolled past restriction point, force scroll back
-      // Note: This is a "hard restrict" as requested
-      if (grid.scrollTop + grid.clientHeight > restrictedHeight) {
-        grid.scrollTop = restrictedHeight - grid.clientHeight;
-      }
-    };
-
-    const grid = document.querySelector('.work-detail-grid');
-    if (grid) {
-      grid.addEventListener('scroll', handleScroll);
-    }
-    return () => {
-      if (grid) grid.removeEventListener('scroll', handleScroll);
-    };
-  }, [work]); // Re-run if work item changes (content might change)
+  // Mobile scroll restriction logic removed per user request
 
   // Triple the tags to ensure smooth infinite scrolling even with few tags
   const scrolledTags = [...work.tags, ...work.tags, ...work.tags];
