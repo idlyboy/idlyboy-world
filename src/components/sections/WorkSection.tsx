@@ -250,26 +250,26 @@ interface WorkTileProps {
 function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium', imagePosition = 'center', onClick, className = '' }: WorkTileProps) {
   // Determine if this is a bottom row tile (Tring or Side Projects) - for mobile only
   const isBottomRowTile = company === 'Tring' || company === 'Side Projects/Consulting';
-  
+
   return (
     <Tile span={span} className={`group cursor-pointer hover:bg-[#2a2a2a] transition-colors relative work-tile ${className}`}>
       <div className="absolute inset-0" onClick={onClick}>
-        <img 
-          src={image} 
-          alt={company} 
-          className="w-full h-full object-cover" 
+        <img
+          src={image}
+          alt={company}
+          className="w-full h-full object-cover"
           style={{ objectPosition: imagePosition }}
         />
       </div>
 
       {/* Text content - anchored to bottom */}
       <div className={`work-tile-content relative mt-auto px-6 pb-6 pt-20 flex flex-col gap-3 pointer-events-none ${isBottomRowTile ? 'work-tile-bottom-row' : ''}`}
-           style={{
-             background: 'linear-gradient(to bottom, transparent 0%, rgba(8, 8, 8, 0.6) 40%, rgba(8, 8, 8, 0.6) 60%, rgba(8, 8, 8, 0.9) 100%)'
-           }}>
+        style={{
+          background: 'linear-gradient(to bottom, transparent 0%, rgba(8, 8, 8, 0.6) 40%, rgba(8, 8, 8, 0.6) 60%, rgba(8, 8, 8, 0.9) 100%)'
+        }}>
         {/* Company name (bottom-most in visual hierarchy, top-most in code) */}
         <h3 className="text-white work-tile-company">{company}</h3>
-        
+
         {/* Role */}
         <p className="text-gray-400 text-sm work-tile-role">{role}</p>
 
@@ -309,7 +309,7 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
 function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => void }) {
   // Triple the tags to ensure smooth infinite scrolling even with few tags
   const scrolledTags = [...work.tags, ...work.tags, ...work.tags];
-  
+
   // PDF Modal state
   const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
 
@@ -323,15 +323,15 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
     category?: string;
     industry?: string;
   } | null>(null);
-  
+
   // Pilot Partners logos state and animation (for Causality Network)
   const [isPaused, setIsPaused] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Pratilipi data point state
   const [pratilipiDataPoint, setPratilipiDataPoint] = useState(0);
-  
+
   // Switch Pratilipi data points every 7 seconds
   useEffect(() => {
     if (work.company === 'Pratilipi') {
@@ -351,7 +351,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
     bristolLogo,
     wisconsinLogo
   ];
-  
+
   const partnerNames = [
     'Max Planck Institute for Human Cognitive & Brain Science',
     'Imperial College London',
@@ -360,20 +360,20 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
     'University of Bristol',
     'University of Wisconsin-Madison'
   ];
-  
+
   const xTranslation = useMotionValue(0);
-  
+
   // Calculate total width of one set of logos
   // Logo width 64px (w-16) + Gap 24px (gap-6) = 88px
   const totalWidth = partnerLogos.length * 88;
-  
+
   useAnimationFrame((time, delta) => {
     if (!isPaused && work.company === 'Causality Network') {
       // Move totalWidth in 20 seconds
       const speed = totalWidth / 20;
       const move = (speed * delta) / 1000;
       let newX = xTranslation.get() - move;
-      
+
       if (newX <= -totalWidth) {
         newX += totalWidth;
       }
@@ -383,14 +383,14 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
 
   const NavTile = () => (
     <div className="work-detail-nav-tile col-span-1 row-span-1 grid grid-cols-2 grid-rows-2 gap-4 h-full">
-      <div 
+      <div
         className="bg-[#080808] rounded-lg overflow-hidden h-full w-full flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors group"
         onClick={() => work.url && window.open(work.url.startsWith('http') ? work.url : `https://${work.url}`, '_blank')}
       >
         <Globe className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors" strokeWidth={1.5} />
       </div>
 
-      <div 
+      <div
         className="bg-[#080808] rounded-lg overflow-hidden h-full w-full flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors group"
         onClick={onClose}
       >
@@ -400,40 +400,40 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
       </div>
 
       <div className="col-span-2 bg-[#080808] rounded-lg overflow-hidden flex items-center relative">
-         <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#111111] to-transparent z-10 pointer-events-none" />
-         <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#111111] to-transparent z-10 pointer-events-none" />
-         
-         <motion.div 
-           className="flex gap-3 px-4 w-max"
-           animate={{ x: "-33.33%" }}
-           transition={{ 
-             duration: 10,
-             repeat: Infinity,
-             ease: "linear"
-           }}
-           style={{
-             willChange: 'transform',
-             backfaceVisibility: 'hidden',
-             WebkitBackfaceVisibility: 'hidden',
-           }}
-         >
-           {scrolledTags.map((tag, i) => (
-             <span 
-               key={i} 
-               className="px-3 py-1.5 bg-gray-800/50 text-gray-300 text-sm rounded-lg whitespace-nowrap border border-white/5"
-             >
-               {tag}
-             </span>
-           ))}
-         </motion.div>
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#111111] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#111111] to-transparent z-10 pointer-events-none" />
+
+        <motion.div
+          className="flex gap-3 px-4 w-max"
+          animate={{ x: "-33.33%" }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+          style={{
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+          }}
+        >
+          {scrolledTags.map((tag, i) => (
+            <span
+              key={i}
+              className="px-3 py-1.5 bg-gray-800/50 text-gray-300 text-sm rounded-lg whitespace-nowrap border border-white/5"
+            >
+              {tag}
+            </span>
+          ))}
+        </motion.div>
       </div>
     </div>
   );
 
   return (
     <>
-    {/* Mobile-only styles */}
-    <style>{`
+      {/* Mobile-only styles */}
+      <style>{`
       @media (max-width: 767px) {
         /* Make the container scrollable */
         .work-detail-grid {
@@ -619,516 +619,516 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
         }
       }
     `}</style>
-    <TileGrid className="work-detail-grid">
-      <Tile span="medium" glass className="work-detail-tile-1">
-        <img 
-          src={work.image} 
-          alt={work.company} 
-          className="w-full h-full object-cover"
-          style={{ objectPosition: work.imagePosition }}
-        />
-      </Tile>
-      <Tile span="wide" glass className="work-detail-tile-2 work-detail-text-tile work-detail-company-tile">
-        <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-          <div className="flex flex-wrap items-baseline gap-2">
-            <h2 className="text-xl text-white font-medium">{work.company}</h2>
-            <h3 className="text-base text-gray-500">{work.role}</h3>
+      <TileGrid className="work-detail-grid">
+        <Tile span="medium" glass className="work-detail-tile-1">
+          <img
+            src={work.image}
+            alt={work.company}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: work.imagePosition }}
+          />
+        </Tile>
+        <Tile span="wide" glass className="work-detail-tile-2 work-detail-text-tile work-detail-company-tile">
+          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+            <div className="flex flex-wrap items-baseline gap-2">
+              <h2 className="text-xl text-white font-medium">{work.company}</h2>
+              <h3 className="text-base text-gray-500">{work.role}</h3>
+            </div>
+            {work.company === 'Causality Network' && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  CN used on-chain attestations and hardware signatures to authenticate scientific datasets. We set out to solve the replication crisis and unlock the creator economy in science. (raised $175k from Graph Paper Capital)
+                </p>
+              </div>
+            )}
+            {work.company === 'Pratilipi' && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  Pratilipi is India's largest storytelling platform, built to democratise literature in vernacular languages for internet users in India.
+                </p>
+                <p className="text-base text-gray-400">
+                  I led onboarding and retention through our growth from 8-30Mn MAU.
+                </p>
+              </div>
+            )}
+            {work.company === 'Kleros' && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  Kleros is a subjective oracle powered by schelling-point game theory, with dispute resolution at the heart of the protocol.
+                </p>
+                <p className="text-base text-gray-400">
+                  Use-cases include community curated lists, prediction markets resolution, etc.
+                </p>
+              </div>
+            )}
+            {work.company === 'Tring' && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  Tring is an AI powered notifications assistant aimed at getting back user focus by optimising push notifications.
+                </p>
+                <p className="text-base text-gray-400">
+                  By owning the primary touchpoint of app communication, our goal was to improve CTRs for marketers while improving digital well-being.
+                </p>
+              </div>
+            )}
+            {work.company === 'Side Projects/Consulting' && (
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  I've worked with 2 VC-backed startups (Peanut and Rwazi) and built a legal AI tool as a side project.
+                </p>
+                <p className="text-base text-gray-400">
+                  My consulting work spans Product, Design and Growth across web3 payments, web2 consumer and legal AI SaaS
+                </p>
+              </div>
+            )}
           </div>
+        </Tile>
+        <div className="work-detail-tile-3 col-span-1 row-span-1">
+          <NavTile />
+        </div>
+        <Tile span="medium" glass className={`work-detail-tile-5 ${work.company === 'Causality Network' ? "!overflow-visible" : ""}`}>
           {work.company === 'Causality Network' && (
-            <div className="flex flex-col gap-3">
-              <p className="text-base text-gray-400">
-                CN used on-chain attestations and hardware signatures to authenticate scientific datasets. We set out to solve the replication crisis and unlock the creator economy in science. (raised $175k from Graph Paper Capital)
-              </p>
+            <div className="pilot-partners-content flex flex-col items-center h-full gap-4 pt-10">
+              <h3 className="text-white text-center">Pilot Partners</h3>
+              <div
+                ref={containerRef}
+                className="relative w-full overflow-hidden pt-8 pb-12"
+              >
+                {/* Left fade gradient */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
+
+                {/* Right fade gradient */}
+                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
+
+                <motion.div
+                  className="flex gap-6 items-center"
+                  style={{
+                    x: xTranslation,
+                    willChange: 'transform',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                  }}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => {
+                    setIsPaused(false);
+                    setHoveredIndex(null);
+                  }}
+                >
+                  {[...partnerLogos, ...partnerLogos].map((logo, index) => {
+                    const partnerIndex = index % partnerLogos.length;
+                    const isHovered = hoveredIndex === index;
+
+                    return (
+                      <div
+                        key={index}
+                        className="relative flex-shrink-0"
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        <img
+                          src={logo}
+                          alt={partnerNames[partnerIndex]}
+                          className="h-16 w-auto object-contain"
+                        />
+                        {isHovered && (
+                          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
+                            {partnerNames[partnerIndex]}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              </div>
             </div>
           )}
-          {work.company === 'Pratilipi' && (
-            <div className="flex flex-col gap-3">
-              <p className="text-base text-gray-400">
-                Pratilipi is India's largest storytelling platform, built to democratise literature in vernacular languages for internet users in India.
-              </p>
-              <p className="text-base text-gray-400">
-                I led onboarding and retention through our growth from 8-30Mn MAU.
-              </p>
+          {work.company === 'Tring' && (
+            <div className="w-full h-full bg-[#080808] overflow-hidden">
+              <img
+                src={tringNotificationImg}
+                alt="Tring Notifications"
+                className="w-full h-full object-cover"
+              />
             </div>
           )}
           {work.company === 'Kleros' && (
-            <div className="flex flex-col gap-3">
+            <div className="kleros-growth-tile flex flex-col items-center justify-between h-full px-6 pt-8">
+              <h3 className="text-white text-center">Growth Impact</h3>
+              <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>2x</h2>
+              <p className="text-base text-gray-400 text-center mb-8">Weekly submissions and data consumed</p>
+            </div>
+          )}
+          {work.company === 'Pratilipi' && (
+            <div className="pratilipi-growth-tile relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={pratilipiDataPoint}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 flex flex-col items-center justify-between px-6 pt-8"
+                  style={{
+                    willChange: 'opacity',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                  }}
+                >
+                  {pratilipiDataPoint === 0 ? (
+                    <>
+                      <h3 className="text-white text-center">Onboarding Growth</h3>
+                      <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>25%</h2>
+                      <p className="text-base text-gray-400 text-center mb-8">App Launch → First Read went from 28% to 35%</p>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-white text-center">Retention Growth</h3>
+                      <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>20%</h2>
+                      <p className="text-base text-gray-400 text-center mb-8">
+                        d1 retention: 27% → 32%<br />
+                        d7 retention: 12% → 14.5%
+                      </p>
+                    </>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
+          {work.company === 'Side Projects/Consulting' && (
+            <div className="w-full h-full bg-[#080808] overflow-hidden">
+              <img
+                src={rabbyPayWithLinksTile}
+                alt="Rabby - Pay with links"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+        </Tile>
+        <Tile span="wide" glass className="work-detail-tile-4 work-detail-text-tile">
+          {work.company === 'Causality Network' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  As Product Lead, I designed and engineered the MVP, where data-integrity attestations are made on Base via EAS, for neuroscientific datasets produced by EEG devices.
+                </p>
+                <p className="text-base text-gray-400">
+                  We made attestations for Imperial College London's lab data and EEG data of people at network states.
+                </p>
+              </div>
+            </div>
+          )}
+          {work.company === 'Pratilipi' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <div className="flex flex-col gap-3">
+                <p className="text-base text-gray-400">
+                  As a PM owning the new user journey, my goal was to improve M1 retention &amp; maximise MAU contribution.
+                </p>
+                <p className="text-base text-gray-400">
+                  From optimising onboarding funnels, crafting the push notification journey to increasing TAM of high-retention cohorts -- we grew the metric with a data-driven, experiment-led mindset.
+                </p>
+              </div>
+            </div>
+          )}
+          {work.company === 'Kleros' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
               <p className="text-base text-gray-400">
-                Kleros is a subjective oracle powered by schelling-point game theory, with dispute resolution at the heart of the protocol.
+                As Product Lead - Curate, I designed and launched Kleros Scout to productise submission and consumption of contract &amp; wallet insights.
               </p>
               <p className="text-base text-gray-400">
-                Use-cases include community curated lists, prediction markets resolution, etc.
+                I secured a key partnership with Metamask, making us one of the first snaps to be onboarded. Other consumers of insights included Etherscan, wallets and DEXs.
               </p>
             </div>
           )}
           {work.company === 'Tring' && (
-            <div className="flex flex-col gap-3">
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
               <p className="text-base text-gray-400">
-                Tring is an AI powered notifications assistant aimed at getting back user focus by optimising push notifications.
+                As Founding PM-designer, I led user research which drove our MVP feature set and designed the end-to-end UX.
               </p>
               <p className="text-base text-gray-400">
-                By owning the primary touchpoint of app communication, our goal was to improve CTRs for marketers while improving digital well-being.
+                Our beta had ~3k users whose behaviour I analysed via SQL on Metabase.
               </p>
             </div>
           )}
           {work.company === 'Side Projects/Consulting' && (
-            <div className="flex flex-col gap-3">
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
               <p className="text-base text-gray-400">
-                I've worked with 2 VC-backed startups (Peanut and Rwazi) and built a legal AI tool as a side project.
+                Designed mockups for Peanut's payment links on Rabby and Butter Wallet and explored strategies for Peanut App's launch at Devconnect '25.
               </p>
               <p className="text-base text-gray-400">
-                My consulting work spans Product, Design and Growth across web3 payments, web2 consumer and legal AI SaaS
+                Revamped Rwazi's lifestlye AI consumer app with focus on onboarding, home and AI chat interfaces.
               </p>
             </div>
           )}
-        </div>
-      </Tile>
-      <div className="work-detail-tile-3 col-span-1 row-span-1">
-      <NavTile />
-      </div>
-      <Tile span="wide" glass className="work-detail-tile-4 work-detail-text-tile">
-        {work.company === 'Causality Network' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-             <div className="flex flex-col gap-3">
-               <p className="text-base text-gray-400">
-                 As Product Lead, I designed and engineered the MVP, where data-integrity attestations are made on Base via EAS, for neuroscientific datasets produced by EEG devices.
-               </p>
-               <p className="text-base text-gray-400">
-                 We made attestations for Imperial College London's lab data and EEG data of people at network states.
-               </p>
-             </div>
-          </div>
-        )}
-        {work.company === 'Pratilipi' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-             <div className="flex flex-col gap-3">
-               <p className="text-base text-gray-400">
-                 As a PM owning the new user journey, my goal was to improve M1 retention &amp; maximise MAU contribution.
-               </p>
-               <p className="text-base text-gray-400">
-                 From optimising onboarding funnels, crafting the push notification journey to increasing TAM of high-retention cohorts -- we grew the metric with a data-driven, experiment-led mindset.
-               </p>
-             </div>
-          </div>
-        )}
-        {work.company === 'Kleros' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              As Product Lead - Curate, I designed and launched Kleros Scout to productise submission and consumption of contract &amp; wallet insights.
-            </p>
-            <p className="text-base text-gray-400">
-              I secured a key partnership with Metamask, making us one of the first snaps to be onboarded. Other consumers of insights included Etherscan, wallets and DEXs.
-            </p>
-          </div>
-        )}
-        {work.company === 'Tring' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              As Founding PM-designer, I led user research which drove our MVP feature set and designed the end-to-end UX.
-            </p>
-            <p className="text-base text-gray-400">
-              Our beta had ~3k users whose behaviour I analysed via SQL on Metabase.
-            </p>
-          </div>
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              Designed mockups for Peanut's payment links on Rabby and Butter Wallet and explored strategies for Peanut App's launch at Devconnect '25.
-            </p>
-            <p className="text-base text-gray-400">
-              Revamped Rwazi's lifestlye AI consumer app with focus on onboarding, home and AI chat interfaces.
-            </p>
-          </div>
-        )}
-      </Tile>
-      <Tile span="medium" glass className={`work-detail-tile-5 ${work.company === 'Causality Network' ? "!overflow-visible" : ""}`}>
-        {work.company === 'Causality Network' && (
-          <div className="pilot-partners-content flex flex-col items-center h-full gap-4 pt-10">
-            <h3 className="text-white text-center">Pilot Partners</h3>
-            <div 
-              ref={containerRef}
-              className="relative w-full overflow-hidden pt-8 pb-12"
+        </Tile>
+        <Tile span="medium" glass className="work-detail-tile-6">
+          {work.company === 'Causality Network' && (
+            <WorkDesignTile
+              image={causalityWorkexUi}
+              alt="Causality Workex UI"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Pratilipi' && (
+            <WorkDesignTile
+              image={pratilipiLoginScreen}
+              alt="Pratilipi Login Screen"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Tring' && (
+            <WorkDesignTile
+              image={tringPermissionWebsiteSquare}
+              alt="Tring - Permission website square"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Kleros' && (
+            <a
+              href="https://klerosscout.eth.limo/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full relative group overflow-hidden"
             >
-              {/* Left fade gradient */}
-              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
-              
-              {/* Right fade gradient */}
-              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
-              
-              <motion.div
-                className="flex gap-6 items-center"
-                style={{ 
-                  x: xTranslation,
-                  willChange: 'transform',
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => {
-                  setIsPaused(false);
-                  setHoveredIndex(null);
-                }}
-              >
-                {[...partnerLogos, ...partnerLogos].map((logo, index) => {
-                  const partnerIndex = index % partnerLogos.length;
-                  const isHovered = hoveredIndex === index;
-                  
-                  return (
-                    <div
-                      key={index}
-                      className="relative flex-shrink-0"
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                    >
-                      <img
-                        src={logo}
-                        alt={partnerNames[partnerIndex]}
-                        className="h-16 w-auto object-contain"
-                      />
-                      {isHovered && (
-                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
-                          {partnerNames[partnerIndex]}
-          </div>
-        )}
-                    </div>
-                  );
-                })}
-              </motion.div>
+              <div className="absolute inset-0">
+                <img
+                  src={klerosScout}
+                  alt="Kleros Scout - Contract Insights"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-white font-medium leading-tight">Kleros Scout - Contract Insights</p>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </a>
+          )}
+          {work.company === 'Side Projects/Consulting' && (
+            <WorkDesignTile
+              image={rwaziElaIntroTile}
+              alt="Rwazi - Ela Intro"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+        </Tile>
+        <Tile span="medium" glass className="work-detail-tile-7">
+          {work.company === 'Causality Network' && (
+            <WorkDesignTile
+              image={balajiXCausality}
+              alt="Balaji x Causality"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Pratilipi' && (
+            <WorkDesignTile
+              image={pratilipiLanguageScreen}
+              alt="Pratilipi Language Selection"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {/* Kleros: mockup image tile (Token Curated Registry) after swaps */}
+          {work.company === 'Kleros' && (
+            <WorkDesignTile
+              image={klerosTokenList}
+              alt="Kleros Token Curated Registry"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Tring' && (
+            <WorkDesignTile
+              image={tringOnboardingImg}
+              alt="Tring Onboarding"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Side Projects/Consulting' && (
+            <WorkDesignTile
+              image={legalFlowCasesDashboardTile}
+              alt="LegalFlow - Cases Dashboard"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+        </Tile>
+        <Tile span="wide" glass className="work-detail-tile-9 work-detail-text-tile">
+          {work.company === 'Causality Network' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-2 justify-center h-full">
+              <p className="text-base text-gray-400">
+                Our GTM experiments spanned commercial & academia.
+              </p>
+              <p className="text-base text-gray-400">
+                → Pilot partnerships with Imperial College, Max Planck Institute, etc. to authenticate lab data
+              </p>
+              <p className="text-base text-gray-400">
+                → Neuroscience experiments at Balaji's Network School
+              </p>
+              <p className="text-base text-gray-400">
+                → Pilot with ad agency for consumer-brand insights
+              </p>
             </div>
-          </div>
-        )}
-        {work.company === 'Tring' && (
-          <div className="w-full h-full bg-[#080808] overflow-hidden">
-             <img 
-               src={tringNotificationImg} 
-               alt="Tring Notifications"
-               className="w-full h-full object-cover"
-             />
-          </div>
-        )}
-        {work.company === 'Kleros' && (
-          <div className="kleros-growth-tile flex flex-col items-center justify-between h-full px-6 pt-8">
-            <h3 className="text-white text-center">Growth Impact</h3>
-            <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>2x</h2>
-            <p className="text-base text-gray-400 text-center mb-8">Weekly submissions and data consumed</p>
-          </div>
-        )}
-        {work.company === 'Pratilipi' && (
-          <div className="pratilipi-growth-tile relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={pratilipiDataPoint}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex flex-col items-center justify-between px-6 pt-8"
-                style={{
-                  willChange: 'opacity',
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
-              >
-                {pratilipiDataPoint === 0 ? (
-                  <>
-                    <h3 className="text-white text-center">Onboarding Growth</h3>
-                    <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>25%</h2>
-                    <p className="text-base text-gray-400 text-center mb-8">App Launch → First Read went from 28% to 35%</p>
-                  </>
-                ) : (
-                  <>
-                    <h3 className="text-white text-center">Retention Growth</h3>
-                    <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>20%</h2>
-                    <p className="text-base text-gray-400 text-center mb-8">
-                      d1 retention: 27% → 32%<br />
-                      d7 retention: 12% → 14.5%
-                    </p>
-                  </>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <div className="w-full h-full bg-[#080808] overflow-hidden">
-             <img 
-               src={rabbyPayWithLinksTile} 
-               alt="Rabby - Pay with links"
-               className="w-full h-full object-cover"
-             />
-          </div>
-        )}
-      </Tile>
-      <Tile span="medium" glass className="work-detail-tile-6">
-        {work.company === 'Causality Network' && (
-          <WorkDesignTile
-            image={causalityWorkexUi}
-            alt="Causality Workex UI"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Pratilipi' && (
-          <WorkDesignTile
-            image={pratilipiLoginScreen}
-            alt="Pratilipi Login Screen"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Tring' && (
-          <WorkDesignTile
-            image={tringPermissionWebsiteSquare}
-            alt="Tring - Permission website square"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Kleros' && (
-          <a
-            href="https://klerosscout.eth.limo/"
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="block w-full h-full relative group overflow-hidden"
-          >
-             <div className="absolute inset-0">
-               <img 
-                 src={klerosScout}
-                 alt="Kleros Scout - Contract Insights"
-                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               />
-             </div>
-             <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+          )}
+          {work.company === 'Pratilipi' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <p className="text-base text-gray-400">
+                I designed all my experiments/features and the new user journey we built has stood tall through high acquisition phases (60-100K users daily @$0.2-0.3 CPI) and otherwise.
+              </p>
+              <p className="text-base text-gray-400">
+                I also ran social consumer experiments (feed, stories, etc.) and co-led monetisation pilots with the co-founder.
+              </p>
+            </div>
+          )}
+          {work.company === 'Kleros' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <p className="text-base text-gray-400">
+                Apart from productising contract security insights with a team of devs and BD, I reworked incentives mechanisms and contributed to tokenomics of new courts.
+              </p>
+              <p className="text-base text-gray-400">
+                I also led the Kleros Incubator during my tenure.
+              </p>
+            </div>
+          )}
+          {work.company === 'Tring' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <p className="text-base text-gray-400">
+                For user research, I spent hours at IT park smoking zones, as our ICPs hung out there. I did about 100 IRL interviews, 300 phone interviews apart from a 1000 person survey.
+              </p>
+              <p className="text-base text-gray-400">
+                After systematically breaking down responses, we built the MVP and released the beta to a subset of interested users.
+              </p>
+            </div>
+          )}
+          {work.company === 'Side Projects/Consulting' && (
+            <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
+              <p className="text-base text-gray-400">
+                Vibecoded a legal AI tool for document extraction and real estate due diligence; explored deterministic prompt interfaces for lawyers.
+              </p>
+              <p className="text-base text-gray-400">
+                Deeply used AI tools for coding, design, media to 10x output and extend skillset.
+              </p>
+            </div>
+          )}
+        </Tile>
+        <Tile span="medium" glass className="work-detail-tile-8">
+          {work.company === 'Causality Network' && (
+            <div
+              className="w-full h-full relative group overflow-hidden cursor-pointer"
+              onClick={() => setIsPdfModalOpen(true)}
+            >
+              <div className="absolute inset-0">
+                <img
+                  src={neurolensWebsiteTile}
+                  alt="Neurolens Website Tile"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
                 <div className="flex items-center justify-between gap-4">
-                   <p className="text-white font-medium leading-tight">Kleros Scout - Contract Insights</p>
-                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
-                     <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
-                   </div>
+                  <p className="text-white font-medium leading-tight">
+                    Consumer Insights Report
+                  </p>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                  </div>
                 </div>
-             </div>
-          </a>
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <WorkDesignTile
-            image={rwaziElaIntroTile}
-            alt="Rwazi - Ela Intro"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-      </Tile>
-      <Tile span="medium" glass className="work-detail-tile-7">
-        {work.company === 'Causality Network' && (
-          <WorkDesignTile
-            image={balajiXCausality}
-            alt="Balaji x Causality"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Pratilipi' && (
-          <WorkDesignTile
-            image={pratilipiLanguageScreen}
-            alt="Pratilipi Language Selection"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {/* Kleros: mockup image tile (Token Curated Registry) after swaps */}
-        {work.company === 'Kleros' && (
-          <WorkDesignTile
-            image={klerosTokenList}
-            alt="Kleros Token Curated Registry"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Tring' && (
-          <WorkDesignTile
-            image={tringOnboardingImg}
-            alt="Tring Onboarding"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <WorkDesignTile
-            image={legalFlowCasesDashboardTile}
-            alt="LegalFlow - Cases Dashboard"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-      </Tile>
-      <Tile span="medium" glass className="work-detail-tile-8">
-        {work.company === 'Causality Network' && (
-          <div 
-            className="w-full h-full relative group overflow-hidden cursor-pointer"
-            onClick={() => setIsPdfModalOpen(true)}
-          >
-             <div className="absolute inset-0">
-               <img 
-                 src={neurolensWebsiteTile} 
-                 alt="Neurolens Website Tile"
-                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               />
-             </div>
-             <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+              </div>
+            </div>
+          )}
+          {work.company === 'Kleros' && (
+            <a
+              href="https://snaps.metamask.io/snap/npm/kleros/scout-snap/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full relative group overflow-hidden"
+            >
+              <div className="absolute inset-0">
+                <img
+                  src={klerosMetaMask}
+                  alt="Kleros Scout x MetaMask Snap"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
                 <div className="flex items-center justify-between gap-4">
-                   <p className="text-white font-medium leading-tight">
-                     Consumer Insights Report
-                   </p>
-                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
-                     <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
-                   </div>
+                  <p className="text-white font-medium leading-tight">Kleros Scout x MetaMask Snap</p>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                  </div>
                 </div>
-             </div>
-          </div>
-        )}
-        {work.company === 'Kleros' && (
-          <a 
-            href="https://snaps.metamask.io/snap/npm/kleros/scout-snap/" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="block w-full h-full relative group overflow-hidden"
-          >
-             <div className="absolute inset-0">
-               <img 
-                 src={klerosMetaMask}
-                 alt="Kleros Scout x MetaMask Snap"
-                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               />
-             </div>
-             <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+              </div>
+            </a>
+          )}
+          {work.company === 'Pratilipi' && (
+            <a
+              href="https://amplitude.com/case-studies/pratilipi"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full relative group overflow-hidden"
+            >
+              <div className="absolute inset-0">
+                <img
+                  src={amplitudeCaseStudyImg}
+                  alt="Amplitude Case Study"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
                 <div className="flex items-center justify-between gap-4">
-                   <p className="text-white font-medium leading-tight">Kleros Scout x MetaMask Snap</p>
-                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
-                     <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
-                   </div>
+                  <p className="text-white font-medium leading-tight">Amplitude's case study on our work</p>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                  </div>
                 </div>
-             </div>
-          </a>
-        )}
-        {work.company === 'Pratilipi' && (
-          <a 
-            href="https://amplitude.com/case-studies/pratilipi" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="block w-full h-full relative group overflow-hidden"
-          >
-             <div className="absolute inset-0">
-               <img 
-                 src={amplitudeCaseStudyImg}
-                 alt="Amplitude Case Study"
-                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-             />
-          </div>
-             <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
-                <div className="flex items-center justify-between gap-4">
-                   <p className="text-white font-medium leading-tight">Amplitude's case study on our work</p>
-                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
-                     <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
-                   </div>
-                </div>
-             </div>
-          </a>
-        )}
-        {work.company === 'Tring' && (
-          <WorkDesignTile
-            image={tringCaseStudyImg}
-            alt="Tring UX Case Study"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <WorkDesignTile
-            image={legalFlowPromptBuilderTile}
-            alt="LegalFlow - Prompt Builder"
-            company={work.company}
-            onModalOpen={setSelectedDesignItem}
-          />
-        )}
-      </Tile>
-      <Tile span="wide" glass className="work-detail-tile-9 work-detail-text-tile">
-        {work.company === 'Causality Network' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-2 justify-center h-full">
-            <p className="text-base text-gray-400">
-              Our GTM experiments spanned commercial & academia.
-            </p>
-            <p className="text-base text-gray-400">
-              → Pilot partnerships with Imperial College, Max Planck Institute, etc. to authenticate lab data
-            </p>
-            <p className="text-base text-gray-400">
-              → Neuroscience experiments at Balaji's Network School
-            </p>
-            <p className="text-base text-gray-400">
-              → Pilot with ad agency for consumer-brand insights
-            </p>
-          </div>
-        )}
-        {work.company === 'Pratilipi' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              I designed all my experiments/features and the new user journey we built has stood tall through high acquisition phases (60-100K users daily @$0.2-0.3 CPI) and otherwise.
-            </p>
-            <p className="text-base text-gray-400">
-              I also ran social consumer experiments (feed, stories, etc.) and co-led monetisation pilots with the co-founder.
-            </p>
-          </div>
-        )}
-        {work.company === 'Kleros' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              Apart from productising contract security insights with a team of devs and BD, I reworked incentives mechanisms and contributed to tokenomics of new courts.
-            </p>
-            <p className="text-base text-gray-400">
-              I also led the Kleros Incubator during my tenure.
-            </p>
-          </div>
-        )}
-        {work.company === 'Tring' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              For user research, I spent hours at IT park smoking zones, as our ICPs hung out there. I did about 100 IRL interviews, 300 phone interviews apart from a 1000 person survey.
-            </p>
-            <p className="text-base text-gray-400">
-              After systematically breaking down responses, we built the MVP and released the beta to a subset of interested users.
-            </p>
-          </div>
-        )}
-        {work.company === 'Side Projects/Consulting' && (
-          <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-            <p className="text-base text-gray-400">
-              Vibecoded a legal AI tool for document extraction and real estate due diligence; explored deterministic prompt interfaces for lawyers.
-            </p>
-            <p className="text-base text-gray-400">
-              Deeply used AI tools for coding, design, media to 10x output and extend skillset.
-            </p>
-          </div>
-        )}
-      </Tile>
-    </TileGrid>
-    <PdfModal
-      isOpen={isPdfModalOpen}
-      onClose={() => setIsPdfModalOpen(false)}
-      pdfUrl={neurolensReport}
-      title="NeuroLens Case Study Report"
-    />
-    {selectedDesignItem && (
-      <DesignModal
-        isOpen={!!selectedDesignItem}
-        onClose={() => setSelectedDesignItem(null)}
-        image={selectedDesignItem.image}
-        title={selectedDesignItem.title}
-        subtitle={selectedDesignItem.subtitle}
-        description={selectedDesignItem.description}
-        project={selectedDesignItem.project}
-        category={selectedDesignItem.category}
-        industry={selectedDesignItem.industry}
+              </div>
+            </a>
+          )}
+          {work.company === 'Tring' && (
+            <WorkDesignTile
+              image={tringCaseStudyImg}
+              alt="Tring UX Case Study"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+          {work.company === 'Side Projects/Consulting' && (
+            <WorkDesignTile
+              image={legalFlowPromptBuilderTile}
+              alt="LegalFlow - Prompt Builder"
+              company={work.company}
+              onModalOpen={setSelectedDesignItem}
+            />
+          )}
+        </Tile>
+      </TileGrid>
+      <PdfModal
+        isOpen={isPdfModalOpen}
+        onClose={() => setIsPdfModalOpen(false)}
+        pdfUrl={neurolensReport}
+        title="NeuroLens Case Study Report"
       />
-    )}
+      {selectedDesignItem && (
+        <DesignModal
+          isOpen={!!selectedDesignItem}
+          onClose={() => setSelectedDesignItem(null)}
+          image={selectedDesignItem.image}
+          title={selectedDesignItem.title}
+          subtitle={selectedDesignItem.subtitle}
+          description={selectedDesignItem.description}
+          project={selectedDesignItem.project}
+          category={selectedDesignItem.category}
+          industry={selectedDesignItem.industry}
+        />
+      )}
     </>
   );
 }
@@ -1144,9 +1144,9 @@ export function WorkSection() {
         company: "Causality Network",
         role: "Founding PM-Designer",
         tags: ["Web3", "DeSci", "Data Integrity", "dePIN", "SaaS", "0→1"],
-      dateRange: "Aug '24 → Feb '26",
+        dateRange: "Aug '24 → Feb '26",
         url: "causality.network",
-      image: causalityImg,
+        image: causalityImg,
         span: "wide",
         imagePosition: "right center",
         slug: "causalitynetwork",
@@ -1155,9 +1155,9 @@ export function WorkSection() {
         company: "Kleros",
         role: "Product Lead - Curate",
         tags: ["Web3", "Subjective Oracles", "Wallets", "LegalTech", "1→10"],
-      dateRange: "Sep '22 → Aug '24",
+        dateRange: "Sep '22 → Aug '24",
         url: "kleros.io",
-      image: klerosImg,
+        image: klerosImg,
         span: "large",
         imagePosition: "center 80%",
         slug: "kleros",
@@ -1166,9 +1166,9 @@ export function WorkSection() {
         company: "Pratilipi",
         role: "PM-Designer",
         tags: ["Consumer", "Content", "Vernacular", "10→100"],
-      dateRange: "Mar '20 → Apr '22",
+        dateRange: "Mar '20 → Apr '22",
         url: "techcrunch.com",
-      image: pratilipiImg,
+        image: pratilipiImg,
         span: "large",
         slug: "pratilipi",
       },
@@ -1176,9 +1176,9 @@ export function WorkSection() {
         company: "Tring",
         role: "Founding PM-Designer",
         tags: ["Consumer", "Productivity", "0→1"],
-      dateRange: "Feb '19 → Feb '20",
+        dateRange: "Feb '19 → Feb '20",
         url: "",
-      image: tringImg,
+        image: tringImg,
         span: "medium",
         slug: "tring",
       },
@@ -1186,9 +1186,9 @@ export function WorkSection() {
         company: "Side Projects/Consulting",
         role: "Product Designer",
         tags: ["Consumer", "SaaS", "Web3", "AI"],
-      dateRange: "Feb '19 → Present",
+        dateRange: "Feb '19 → Present",
         url: "",
-      image: sideProjectsImg,
+        image: sideProjectsImg,
         span: "medium",
         slug: "sideprojects",
       },
@@ -1318,11 +1318,11 @@ export function WorkSection() {
           else if (item.company === 'Pratilipi') className = 'work-tile-pratilipi';
           else if (item.company === 'Tring') className = 'work-tile-tring';
           else if (item.company === 'Side Projects/Consulting') className = 'work-tile-side-projects';
-          
+
           return (
-        <WorkTile 
-          key={index} 
-          {...item} 
+            <WorkTile
+              key={index}
+              {...item}
               className={className}
               onClick={() => {
                 if (item.slug) {
@@ -1334,7 +1334,7 @@ export function WorkSection() {
             />
           );
         })}
-    </TileGrid>
+      </TileGrid>
     </>
   );
 }
