@@ -1,6 +1,48 @@
 import { X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getHighResUrl } from '../imagekit-urls';
+
+// Simple image component with shimmer placeholder
+function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div
+      className="w-full overflow-hidden rounded-lg relative"
+      style={{ aspectRatio: '1.4 / 1', backgroundColor: '#1a1a1a' }}
+    >
+      {/* Shimmer placeholder */}
+      {!isLoaded && (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 1.5s infinite',
+          }}
+        />
+      )}
+      {/* Actual image */}
+      <img
+        src={src}
+        alt={alt}
+        className="w-full h-full object-contain"
+        style={{
+          opacity: isLoaded ? 1 : 0,
+          transition: 'opacity 0.3s ease-in-out',
+        }}
+        onLoad={() => setIsLoaded(true)}
+      />
+      {/* Shimmer keyframes */}
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 interface DesignModalProps {
   isOpen: boolean;
@@ -14,11 +56,11 @@ interface DesignModalProps {
   industry?: string;
 }
 
-export function DesignModal({ 
-  isOpen, 
-  onClose, 
-  image, 
-  title, 
+export function DesignModal({
+  isOpen,
+  onClose,
+  image,
+  title,
   subtitle,
   description,
   project,
@@ -31,17 +73,19 @@ export function DesignModal({
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleEscape, true);
       document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleEscape, true);
       document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
@@ -134,6 +178,7 @@ export function DesignModal({
         }
       `}</style>
       <div
+        data-design-modal
         className="design-modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/80"
         onClick={(e) => {
           if (e.target === e.currentTarget) {
@@ -181,10 +226,10 @@ export function DesignModal({
             className="design-modal-desktop-close"
             style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 100 }}
           >
-            <div style={{ 
-              width: '36px', 
-              height: '36px', 
-              borderRadius: '50%', 
+            <div style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
               border: '1px solid #4b5563',
               display: 'flex',
               alignItems: 'center',
@@ -205,15 +250,12 @@ export function DesignModal({
               </div>
             )}
 
-            {/* Image */}
+            {/* Image with shimmer placeholder */}
             {image && (
-              <div className="w-full flex items-center justify-center overflow-hidden rounded-lg">
-                <img
-                  src={getHighResUrl(image || '')}
-                  alt={title || 'Design'}
-                  className="w-full h-auto object-contain"
-                />
-              </div>
+              <ImageWithPlaceholder
+                src={getHighResUrl(image || '')}
+                alt={title || 'Design'}
+              />
             )}
 
             {/* Description */}

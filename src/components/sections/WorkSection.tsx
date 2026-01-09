@@ -28,7 +28,7 @@ function WorkDesignTile({
       // Causality
       'Causality Workex UI': {
         image,
-        title: 'Work Experience Platform',
+        title: 'Causality Network v1 App',
         subtitle: 'On-chain data integrity verification',
         description: 'A comprehensive platform for researchers to attest to their data integrity using blockchain technology. Built with React and integrated with Base network for seamless on-chain attestations.',
         project: 'Causality Network',
@@ -37,7 +37,7 @@ function WorkDesignTile({
       },
       'Balaji x Causality': {
         image,
-        title: 'Network State Integration',
+        title: "Balaji's Network School x CN",
         subtitle: 'EEG data collection and analysis',
         description: 'Collaborative neuroscience experiments conducted with Network State participants. Collected EEG data from diverse demographics to validate the platform\'s data integrity mechanisms.',
         project: 'Causality Network',
@@ -48,8 +48,8 @@ function WorkDesignTile({
       // Kleros
       'Kleros Token Curated Registry': {
         image,
-        title: 'Token Curation Interface',
-        subtitle: 'Community-driven token discovery',
+        title: 'Kleros Scout - Tokens',
+        subtitle: 'Community curated token lists',
         description: 'A decentralized platform for token curation where community members stake tokens to curate high-quality token lists. Built on Ethereum with Schelling point coordination mechanisms.',
         project: 'Kleros Scout',
         category: 'dApp Design',
@@ -59,7 +59,7 @@ function WorkDesignTile({
       // Pratilipi
       'Pratilipi Login Screen': {
         image,
-        title: 'User Onboarding Experience',
+        title: 'Sign Up Screen - Pratilipi',
         subtitle: 'Streamlined authentication flow',
         description: 'Designed the complete user journey from signup to first read, optimizing for vernacular language users across India. Achieved 35% improvement in app launch to first read conversion.',
         project: 'Pratilipi',
@@ -86,6 +86,15 @@ function WorkDesignTile({
         category: 'Permissions UX',
         industry: 'Productivity'
       },
+      'Tring Notifications Widget': {
+        image,
+        title: 'Tring Notifications Widget',
+        subtitle: 'Smart Notification Management',
+        description: 'An intelligent widget that groups and prioritizes notifications based on user context and importance. Reduces visual clutter and helps users stay focused on what matters.',
+        project: 'Tring',
+        category: 'Widget Design',
+        industry: 'Productivity'
+      },
       'Tring Onboarding': {
         image,
         title: 'AI Assistant Setup',
@@ -106,11 +115,11 @@ function WorkDesignTile({
       },
 
       // Side Projects
-      'Rabby - Pay with links': {
+      'Rabby x Pay with Links': {
         image,
-        title: 'Payment Link Generation',
-        subtitle: 'Wallet-integrated payments',
-        description: 'Designed payment link creation interface for Peanut Protocol integrated with Rabby wallet. Enabled seamless crypto payments through shareable links.',
+        title: 'Rabby x Pay with Links',
+        subtitle: 'Wallet-Integrated Payment Links',
+        description: 'Seamless payment link generation directly within the Rabby wallet interface. Enables users to request crypto payments easily via shareable links.',
         project: 'Peanut Protocol',
         category: 'Wallet Integration',
         industry: 'Web3 Payments'
@@ -294,7 +303,7 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-white transition-colors flex items-center gap-1"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <span className="text-xs">{url}</span>
               <ExternalLink className="w-3 h-3" />
@@ -306,7 +315,39 @@ function WorkTile({ company, role, tags, dateRange, url, image, span = 'medium',
   );
 }
 
+
+
+
+
 function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => void }) {
+  // Mobile scroll restriction logic
+  useEffect(() => {
+    const handleScroll = () => {
+      // Only apply on mobile (768px matches existing media queries)
+      if (window.innerWidth >= 768) return;
+
+      const grid = document.querySelector('.work-detail-grid');
+      if (!grid) return;
+
+      const fullContentHeight = grid.scrollHeight;
+      const restrictedHeight = fullContentHeight * 0.85; // 85% of content
+
+      // If scrolled past restriction point, force scroll back
+      // Note: This is a "hard restrict" as requested
+      if (grid.scrollTop + grid.clientHeight > restrictedHeight) {
+        grid.scrollTop = restrictedHeight - grid.clientHeight;
+      }
+    };
+
+    const grid = document.querySelector('.work-detail-grid');
+    if (grid) {
+      grid.addEventListener('scroll', handleScroll);
+    }
+    return () => {
+      if (grid) grid.removeEventListener('scroll', handleScroll);
+    };
+  }, [work]); // Re-run if work item changes (content might change)
+
   // Triple the tags to ensure smooth infinite scrolling even with few tags
   const scrolledTags = [...work.tags, ...work.tags, ...work.tags];
 
@@ -336,7 +377,7 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
   useEffect(() => {
     if (work.company === 'Pratilipi') {
       const interval = setInterval(() => {
-        setPratilipiDataPoint((prev) => (prev === 0 ? 1 : 0));
+        setPratilipiDataPoint((prev: number) => (prev === 0 ? 1 : 0));
       }, 7000);
       return () => clearInterval(interval);
     }
@@ -446,6 +487,12 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
           max-height: calc(100vh - 60px) !important;
           -webkit-overflow-scrolling: touch !important;
           padding-bottom: 1rem !important;
+          /* Hide scrollbar */
+          scrollbar-width: none !important; /* Firefox */
+          -ms-overflow-style: none !important; /* IE/Edge */
+        }
+        .work-detail-grid::-webkit-scrollbar {
+          display: none !important; /* Chrome/Safari/Opera */
         }
         
         /* Two-tile rows: height = width of one tile (square tiles) */
@@ -686,124 +733,117 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
         <div className="work-detail-tile-3 col-span-1 row-span-1">
           <NavTile />
         </div>
-        <Tile span="medium" glass className={`work-detail-tile-5 ${work.company === 'Causality Network' ? "!overflow-visible" : ""}`}>
-          {work.company === 'Causality Network' && (
-            <div className="pilot-partners-content flex flex-col items-center h-full gap-4 pt-10">
-              <h3 className="text-white text-center">Pilot Partners</h3>
-              <div
-                ref={containerRef}
-                className="relative w-full overflow-hidden pt-8 pb-12"
+        {['Kleros', 'Pratilipi'].includes(work.company) ? (
+          <Tile span="medium" glass className="work-detail-tile-6">
+            {work.company === 'Pratilipi' && (
+              <WorkDesignTile
+                image={pratilipiLoginScreen}
+                alt="Pratilipi Login Screen"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
+              />
+            )}
+            {work.company === 'Kleros' && (
+              <a
+                href="https://klerosscout.eth.limo/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full h-full relative group overflow-hidden"
               >
-                {/* Left fade gradient */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
-
-                {/* Right fade gradient */}
-                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
-
-                <motion.div
-                  className="flex gap-6 items-center"
-                  style={{
-                    x: xTranslation,
-                    willChange: 'transform',
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                  }}
-                  onMouseEnter={() => setIsPaused(true)}
-                  onMouseLeave={() => {
-                    setIsPaused(false);
-                    setHoveredIndex(null);
-                  }}
+                <div className="absolute inset-0">
+                  <img
+                    src={klerosScout}
+                    alt="Kleros Scout - Contract Insights"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-white font-medium leading-tight">Kleros Scout - Contract Insights</p>
+                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                      <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                    </div>
+                  </div>
+                </div>
+              </a>
+            )}
+          </Tile>
+        ) : (
+          <Tile span="medium" glass className={`work-detail-tile-5 ${work.company === 'Causality Network' ? "!overflow-visible" : ""}`}>
+            {work.company === 'Causality Network' && (
+              <div className="pilot-partners-content flex flex-col items-center h-full gap-4 pt-10">
+                <h3 className="text-white text-center">Pilot Partners</h3>
+                <div
+                  ref={containerRef}
+                  className="relative w-full overflow-hidden pt-8 pb-12"
                 >
-                  {[...partnerLogos, ...partnerLogos].map((logo, index) => {
-                    const partnerIndex = index % partnerLogos.length;
-                    const isHovered = hoveredIndex === index;
+                  {/* Left fade gradient */}
+                  <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
 
-                    return (
-                      <div
-                        key={index}
-                        className="relative flex-shrink-0"
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                      >
-                        <img
-                          src={logo}
-                          alt={partnerNames[partnerIndex]}
-                          className="h-16 w-auto object-contain"
-                        />
-                        {isHovered && (
-                          <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
-                            {partnerNames[partnerIndex]}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </motion.div>
+                  {/* Right fade gradient */}
+                  <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
+
+                  <motion.div
+                    className="flex gap-6 items-center"
+                    style={{
+                      x: xTranslation,
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                    }}
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => {
+                      setIsPaused(false);
+                      setHoveredIndex(null);
+                    }}
+                  >
+                    {[...partnerLogos, ...partnerLogos].map((logo, index) => {
+                      const partnerIndex = index % partnerLogos.length;
+                      const isHovered = hoveredIndex === index;
+
+                      return (
+                        <div
+                          key={index}
+                          className="relative flex-shrink-0"
+                          onMouseEnter={() => setHoveredIndex(index)}
+                          onMouseLeave={() => setHoveredIndex(null)}
+                        >
+                          <img
+                            src={logo}
+                            alt={partnerNames[partnerIndex]}
+                            className="h-16 w-auto object-contain"
+                          />
+                          {isHovered && (
+                            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
+                              {partnerNames[partnerIndex]}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </motion.div>
+                </div>
               </div>
-            </div>
-          )}
-          {work.company === 'Tring' && (
-            <div className="w-full h-full bg-[#080808] overflow-hidden">
-              <img
-                src={tringNotificationImg}
-                alt="Tring Notifications"
-                className="w-full h-full object-cover"
+            )}
+            {work.company === 'Tring' && (
+              <WorkDesignTile
+                image={tringNotificationImg}
+                alt="Tring Notifications Widget"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
               />
-            </div>
-          )}
-          {work.company === 'Kleros' && (
-            <div className="kleros-growth-tile flex flex-col items-center justify-between h-full px-6 pt-8">
-              <h3 className="text-white text-center">Growth Impact</h3>
-              <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>2x</h2>
-              <p className="text-base text-gray-400 text-center mb-8">Weekly submissions and data consumed</p>
-            </div>
-          )}
-          {work.company === 'Pratilipi' && (
-            <div className="pratilipi-growth-tile relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={pratilipiDataPoint}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 flex flex-col items-center justify-between px-6 pt-8"
-                  style={{
-                    willChange: 'opacity',
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                  }}
-                >
-                  {pratilipiDataPoint === 0 ? (
-                    <>
-                      <h3 className="text-white text-center">Onboarding Growth</h3>
-                      <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>25%</h2>
-                      <p className="text-base text-gray-400 text-center mb-8">App Launch → First Read went from 28% to 35%</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="text-white text-center">Retention Growth</h3>
-                      <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>20%</h2>
-                      <p className="text-base text-gray-400 text-center mb-8">
-                        d1 retention: 27% → 32%<br />
-                        d7 retention: 12% → 14.5%
-                      </p>
-                    </>
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          )}
-          {work.company === 'Side Projects/Consulting' && (
-            <div className="w-full h-full bg-[#080808] overflow-hidden">
-              <img
-                src={rabbyPayWithLinksTile}
-                alt="Rabby - Pay with links"
-                className="w-full h-full object-cover"
+            )}
+            {work.company === 'Side Projects/Consulting' && (
+              <WorkDesignTile
+                image={rabbyPayWithLinksTile}
+                alt="Rabby x Pay with Links"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
               />
-            </div>
-          )}
-        </Tile>
+            )}
+          </Tile>
+        )}
+
         <Tile span="wide" glass className="work-detail-tile-4 work-detail-text-tile">
           {work.company === 'Causality Network' && (
             <div className="work-detail-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
@@ -860,64 +900,81 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
             </div>
           )}
         </Tile>
-        <Tile span="medium" glass className="work-detail-tile-6">
-          {work.company === 'Causality Network' && (
-            <WorkDesignTile
-              image={causalityWorkexUi}
-              alt="Causality Workex UI"
-              company={work.company}
-              onModalOpen={setSelectedDesignItem}
-            />
-          )}
-          {work.company === 'Pratilipi' && (
-            <WorkDesignTile
-              image={pratilipiLoginScreen}
-              alt="Pratilipi Login Screen"
-              company={work.company}
-              onModalOpen={setSelectedDesignItem}
-            />
-          )}
-          {work.company === 'Tring' && (
-            <WorkDesignTile
-              image={tringPermissionWebsiteSquare}
-              alt="Tring - Permission website square"
-              company={work.company}
-              onModalOpen={setSelectedDesignItem}
-            />
-          )}
-          {work.company === 'Kleros' && (
-            <a
-              href="https://klerosscout.eth.limo/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full h-full relative group overflow-hidden"
-            >
-              <div className="absolute inset-0">
-                <img
-                  src={klerosScout}
-                  alt="Kleros Scout - Contract Insights"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+
+        {['Kleros', 'Pratilipi'].includes(work.company) ? (
+          <Tile span="medium" glass className="work-detail-tile-5">
+            {work.company === 'Kleros' && (
+              <div className="kleros-growth-tile flex flex-col items-center justify-between h-full px-6 pt-8">
+                <h3 className="text-white text-center">Growth Impact</h3>
+                <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>2x</h2>
+                <p className="text-base text-gray-400 text-center mb-8">Weekly submissions and data consumed</p>
               </div>
-              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
-                <div className="flex items-center justify-between gap-4">
-                  <p className="text-white font-medium leading-tight">Kleros Scout - Contract Insights</p>
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
-                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
-                  </div>
-                </div>
+            )}
+            {work.company === 'Pratilipi' && (
+              <div className="pratilipi-growth-tile relative flex flex-col items-center justify-between h-full px-6 pt-8 overflow-hidden">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={pratilipiDataPoint}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 flex flex-col items-center justify-between px-6 pt-8"
+                    style={{
+                      willChange: 'opacity',
+                      backfaceVisibility: 'hidden',
+                      WebkitBackfaceVisibility: 'hidden',
+                    }}
+                  >
+                    {pratilipiDataPoint === 0 ? (
+                      <>
+                        <h3 className="text-white text-center">Onboarding Growth</h3>
+                        <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>25%</h2>
+                        <p className="text-base text-gray-400 text-center mb-8">App Launch → First Read went from 28% to 35%</p>
+                      </>
+                    ) : (
+                      <>
+                        <h3 className="text-white text-center">Retention Growth</h3>
+                        <h2 className="text-white font-medium" style={{ fontSize: '3.2rem' }}>20%</h2>
+                        <p className="text-base text-gray-400 text-center mb-8">
+                          d1 retention: 27% → 32%<br />
+                          d7 retention: 12% → 14.5%
+                        </p>
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            </a>
-          )}
-          {work.company === 'Side Projects/Consulting' && (
-            <WorkDesignTile
-              image={rwaziElaIntroTile}
-              alt="Rwazi - Ela Intro"
-              company={work.company}
-              onModalOpen={setSelectedDesignItem}
-            />
-          )}
-        </Tile>
+            )}
+          </Tile>
+        ) : (
+          <Tile span="medium" glass className="work-detail-tile-6">
+            {work.company === 'Causality Network' && (
+              <WorkDesignTile
+                image={causalityWorkexUi}
+                alt="Causality Workex UI"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
+              />
+            )}
+            {work.company === 'Tring' && (
+              <WorkDesignTile
+                image={tringPermissionWebsiteSquare}
+                alt="Tring - Permission website square"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
+              />
+            )}
+            {work.company === 'Side Projects/Consulting' && (
+              <WorkDesignTile
+                image={rwaziElaIntroTile}
+                alt="Rwazi - Ela Intro"
+                company={work.company}
+                onModalOpen={setSelectedDesignItem}
+              />
+            )}
+          </Tile>
+        )}
         <Tile span="medium" glass className="work-detail-tile-7">
           {work.company === 'Causality Network' && (
             <WorkDesignTile
@@ -1093,12 +1150,28 @@ function WorkDetail({ work, onClose }: { work: WorkTileProps, onClose: () => voi
             </a>
           )}
           {work.company === 'Tring' && (
-            <WorkDesignTile
-              image={tringCaseStudyImg}
-              alt="Tring UX Case Study"
-              company={work.company}
-              onModalOpen={setSelectedDesignItem}
-            />
+            <a
+              href="https://www.behance.net/gallery/90523289/Tring-The-Best-Notifications-Productivity-Assistant"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full relative group overflow-hidden"
+            >
+              <div className="absolute inset-0">
+                <img
+                  src={tringCaseStudyImg}
+                  alt="Tring UX Case Study"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="absolute inset-x-0 bottom-0 pt-24 pb-6 px-6 bg-gradient-to-t from-black via-black/90 to-transparent">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-white font-medium leading-tight">Tring UX Case Study</p>
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-white transition-colors">
+                    <ArrowUpRight className="w-4 h-4 text-white group-hover:text-black transition-colors" />
+                  </div>
+                </div>
+              </div>
+            </a>
           )}
           {work.company === 'Side Projects/Consulting' && (
             <WorkDesignTile
@@ -1199,9 +1272,10 @@ export function WorkSection() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        // Don't navigate if PDF modal is open - check if modal element exists
+        // Don't navigate if PDF or Design modal is open - check if modal element exists
         const pdfModal = document.querySelector('[data-pdf-modal]');
-        if (pdfModal) {
+        const designModal = document.querySelector('[data-design-modal]');
+        if (pdfModal || designModal) {
           return; // Let the modal handle the Escape key
         }
         setSelectedWork(null);
