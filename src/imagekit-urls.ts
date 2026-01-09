@@ -103,6 +103,21 @@ export const imagekitAssets: Record<string, { filePath: string }> = {
   'opencell.png': { filePath: '/idlyboy/opencell.png' },
   'peaq_banner.webp': { filePath: '/idlyboy/peaq_banner.webp' },
   'wisconsin.png': { filePath: '/idlyboy/wisconsin.png' },
+  'peaq Home - New User.png': { filePath: '/idlyboy/peaq Home - New User.png' },
+  'Home - $peaq tokenholder.png': { filePath: '/idlyboy/Home - $peaq tokenholder.png' },
+  'Peaq app - Buy tab.png': { filePath: '/idlyboy/Peaq app - Buy tab.png' },
+  'Peaq app - Bridge tab.png': { filePath: '/idlyboy/Peaq app - Bridge tab.png' },
+  'peaq Swap - Modal.png': { filePath: '/idlyboy/peaq Swap - Modal.png' },
+  'peaq Liquid Machines tab.png': { filePath: '/idlyboy/peaq Liquid Machines tab.png' },
+  'matcha search bar and modal.png': { filePath: '/idlyboy/matcha search bar and modal.png' },
+  'matcha token list.png': { filePath: '/idlyboy/matcha token list.png' },
+  'matcha connect wallet.png': { filePath: '/idlyboy/matcha connect wallet.png' },
+  'matcha swap interface 1.png': { filePath: '/idlyboy/matcha swap interface 1.png' },
+  'matcha swap interface 2.png': { filePath: '/idlyboy/matcha swap interface 2.png' },
+  'matcha swap interface 3.png': { filePath: '/idlyboy/matcha swap interface 3.png' },
+  'matcha swap interface 4.png': { filePath: '/idlyboy/matcha swap interface 4.png' },
+  'matcha txn pending.png': { filePath: '/idlyboy/matcha txn pending.png' },
+  'matcha trade details.png': { filePath: '/idlyboy/matcha trade details.png' },
 };
 
 type ImageSize = 'original' | 'thumbnail' | 'medium';

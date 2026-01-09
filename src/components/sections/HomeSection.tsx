@@ -31,10 +31,10 @@ export function HomeSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const toolLogos = [
-    amplitudeLogo, 
-    figmaLogo, 
-    chatgptLogo, 
-    jiraLogo, 
+    amplitudeLogo,
+    figmaLogo,
+    chatgptLogo,
+    jiraLogo,
     etherscanLogo,
     adobeLogo,
     defillamaLogo,
@@ -55,7 +55,7 @@ export function HomeSection() {
   ];
 
   const xTranslation = useMotionValue(0);
-  
+
   // Calculate total width of one set of logos
   // Logo width 64px (w-16) + Gap 24px (gap-6) = 88px
   const totalWidth = toolLogos.length * 88;
@@ -66,7 +66,7 @@ export function HomeSection() {
       const speed = totalWidth / 20;
       const move = (speed * delta) / 1000;
       let newX = xTranslation.get() - move;
-      
+
       if (newX <= -totalWidth) {
         newX += totalWidth;
       }
@@ -146,124 +146,124 @@ export function HomeSection() {
           }
         }
       `}</style>
-    <TileGrid>
+      <TileGrid>
         {/* T1: Wide intro */}
         <Tile span="wide" glass className="home-tile-1">
           <div className="wide-tile-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-          <h2 className="text-white">Hi, I'm Akhil —</h2>
-          <p className="text-gray-400">A product architect with a designer's eye and systems thinker's brain.</p>
-        </div>
-      </Tile>
+            <h2 className="text-white">Hi, I'm Akhil —</h2>
+            <p className="text-gray-400">A product architect with a designer's eye and systems thinker's brain.</p>
+          </div>
+        </Tile>
         {/* T2: ASCII Brain */}
         <Tile span="medium" glass className="home-tile-2">
-        <AsciiBrain theme="dark" />
-      </Tile>
+          <AsciiBrain theme="dark" />
+        </Tile>
         {/* T3: Contact icons */}
         <SubdividedTile span="medium" glass className="home-tile-3">
-        {[
-          <a key="1" href="https://t.me/idlyboydoteth" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
-            <img src={telegramIcon} alt="Telegram" className="w-9 h-9 brightness-0 invert" />
-          </a>,
-          <a key="2" href="https://linkedin.com/in/idlyboy" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
-            <img src={linkedinIcon} alt="LinkedIn" className="w-10 h-10" />
-          </a>,
-          <a key="3" href="mailto:akhil98swaminathan@gmail.com" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
-            <img src={emailIcon} alt="Email" className="w-10 h-10" />
-          </a>,
-          <a key="4" href="https://calendly.com/idlyboy" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
-            <img src={calendarIcon} alt="Calendar" className="w-10 h-10" />
-          </a>
-        ]}
-      </SubdividedTile>
+          {[
+            <a key="1" href="https://t.me/idlyboydoteth" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
+              <img src={telegramIcon} alt="Telegram" className="w-9 h-9 brightness-0 invert" />
+            </a>,
+            <a key="2" href="https://linkedin.com/in/idlyboy" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
+              <img src={linkedinIcon} alt="LinkedIn" className="w-10 h-10" />
+            </a>,
+            <a key="3" href="mailto:akhil98swaminathan@gmail.com" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
+              <img src={emailIcon} alt="Email" className="w-10 h-10" />
+            </a>,
+            <a key="4" href="https://calendly.com/idlyboy" target="_blank" rel="noopener noreferrer" className="h-full flex items-center justify-center hover:opacity-80 transition-opacity">
+              <img src={calendarIcon} alt="Calendar" className="w-10 h-10" />
+            </a>
+          ]}
+        </SubdividedTile>
         {/* T4: Trading Video */}
         <Tile span="medium" glass className="home-tile-4">
-        <video 
-          src={tradingVideo} 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="w-full h-full object-cover object-center"
-        />
-      </Tile>
+          <video
+            src={tradingVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover object-center"
+          />
+        </Tile>
         {/* T5: PM-Designer text */}
         <Tile span="wide" glass className="home-tile-5">
           <div className="wide-tile-content px-12 py-6 flex flex-col gap-3 justify-center h-full">
-          <p className="text-gray-400">A <span className="underline">PM-Designer by craft</span>, I've helped grow Pratilipi (Tencent-funded) to 30mn MAU, productised contract insights at Kleros and built the 0-1 product of a DeSci startup.</p>
-          <p className="text-gray-400 italic">I'm currently available for full-time roles!</p>
-        </div>
-      </Tile>
+            <p className="text-gray-400">A <span className="underline">PM-Designer by craft</span>, I've helped grow Pratilipi (Tencent-funded) to 30mn MAU, productised contract insights at Kleros and built the 0-1 product of a DeSci startup.</p>
+            <p className="text-gray-400 italic">I'm currently available for full-time roles!</p>
+          </div>
+        </Tile>
         {/* T6: Tool Stack */}
         <Tile span="medium" glass className="!overflow-visible home-tile-6">
           <div className="tool-stack-container flex flex-col items-center h-full gap-4 pt-10">
             <h3 className="text-white text-center tool-stack-title">Tool Stack</h3>
-          <div 
-            ref={containerRef}
+            <div
+              ref={containerRef}
               className="tool-stack-animation relative w-full overflow-hidden pt-8 pb-12"
-          >
-            {/* Left fade gradient */}
-              <div className="tool-fade-left absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
-            
-            {/* Right fade gradient */}
-              <div className="tool-fade-right absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
-            
-            <motion.div
-                className="flex gap-6 items-center tool-stack-logos"
-              style={{ 
-                x: xTranslation,
-                willChange: 'transform',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-              }}
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => {
-                setIsPaused(false);
-                setHoveredIndex(null);
-              }}
             >
-              {[...toolLogos, ...toolLogos].map((logo, index) => {
-                const toolIndex = index % toolLogos.length;
-                const isHovered = hoveredIndex === index;
-                
-                return (
-                  <div
-                    key={index}
-                    className="relative flex-shrink-0"
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
-                    <img
-                      src={logo}
-                      alt={toolNames[toolIndex]}
+              {/* Left fade gradient */}
+              <div className="tool-fade-left absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none" />
+
+              {/* Right fade gradient */}
+              <div className="tool-fade-right absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none" />
+
+              <motion.div
+                className="flex gap-6 items-center tool-stack-logos"
+                style={{
+                  x: xTranslation,
+                  willChange: 'transform',
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                }}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => {
+                  setIsPaused(false);
+                  setHoveredIndex(null);
+                }}
+              >
+                {[...toolLogos, ...toolLogos].map((logo, index) => {
+                  const toolIndex = index % toolLogos.length;
+                  const isHovered = hoveredIndex === index;
+
+                  return (
+                    <div
+                      key={index}
+                      className="relative flex-shrink-0"
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                    >
+                      <img
+                        src={logo}
+                        alt={toolNames[toolIndex]}
                         className="tool-logo w-16 h-16 object-contain"
-                    />
-                    {isHovered && (
-                      <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
-                        {toolNames[toolIndex]}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </motion.div>
+                      />
+                      {isHovered && (
+                        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-50">
+                          {toolNames[toolIndex]}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </Tile>
+        </Tile>
         {/* T7: Empty */}
         <Tile span="medium" glass className="home-tile-7">
-      </Tile>
+        </Tile>
         {/* T8: Georgia Hike Photo */}
         <Tile span="medium" glass className="home-tile-8">
-        <img src={georgiaHikeImg} alt="Georgia Hike" className="w-full h-full object-cover" />
-      </Tile>
+          <img src={georgiaHikeImg} alt="Georgia Hike" className="w-full h-full object-cover" />
+        </Tile>
         {/* T9: Travel text */}
         <Tile span="wide" glass className="home-tile-9">
           <div className="wide-tile-content px-12 py-6 flex flex-col justify-center h-full">
-            <p className="text-gray-400">I spend my days & nights building, evenings scoring goals, & in between — I ride motorcycles & pet cats.</p>
-          <p className="text-gray-400 mt-4">From being stateless in the Turkish border to living in network states, I have wicked stories from my travel to 20 countries 🎢</p>
-        </div>
-      </Tile>
-    </TileGrid>
+            <p className="text-gray-400">I spend my days & nights building, evenings scoring goals, and in between — ride motorcycles & pet cats.</p>
+            <p className="text-gray-400 mt-4">I also love to travel, collecting wicked stories from the 20 countries I've visited 🎢</p>
+          </div>
+        </Tile>
+      </TileGrid>
     </>
   );
 }
